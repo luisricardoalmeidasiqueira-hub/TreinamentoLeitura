@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="author" content="Luís Ricardo de Almeida Siqueira">
 <meta name="copyright" content="© 2026 Luís Ricardo de Almeida Siqueira — Todos os direitos reservados.">
-<meta name="app-version" content="2026.09.24.2330">
+<meta name="app-version" content="2026.09.24.2355">
 <title>Treino de leitura de medidores</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -161,6 +161,7 @@ button:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outli
   font-variant-numeric:tabular-nums;cursor:pointer;
 }
 .cons-box.active{border-color:var(--accent)}
+.cons-box.auto{cursor:default;border-style:dashed}
 .cons-box.ok{border-color:var(--ok);color:var(--ok)}
 .cons-box.bad{border-color:var(--bad);color:var(--bad)}
 .cons-box .unit{font-size:.85rem;color:var(--muted);margin-left:4px;font-family:'Barlow',sans-serif}
@@ -272,6 +273,10 @@ details.howto ul{margin:0 0 10px;padding-left:18px;display:grid;gap:5px}
       <button type="button" data-const="0" aria-pressed="true">Sem constante</button>
       <button type="button" data-const="1" aria-pressed="false">Com constante</button>
     </div>
+    <div class="seg" role="group" aria-label="Exercício com constante" id="exSeg">
+      <button type="button" data-ex="consumo" aria-pressed="true">Calcular consumo</button>
+      <button type="button" data-ex="soma" aria-pressed="false">Somar o mês</button>
+    </div>
     <div class="seg" role="group" aria-label="Tempo">
       <button type="button" data-timed="0" aria-pressed="true">Sem tempo</button>
       <button type="button" data-timed="1" aria-pressed="false">Cronômetro</button>
@@ -289,7 +294,7 @@ details.howto ul{margin:0 0 10px;padding-left:18px;display:grid;gap:5px}
     <p class="dir-hint" id="dirHint"></p>
     <div class="boxes" id="boxes" aria-live="polite"></div>
     <div class="cons" id="consRow" hidden>
-      <label for="consBox">Consumo</label>
+      <label for="consBox" id="consLabel">Consumo</label>
       <div class="cons-box" id="consBox" role="textbox" aria-label="Consumo em kWh"></div>
     </div>
     <div class="keypad" id="keypad"></div>
@@ -316,7 +321,8 @@ details.howto ul{margin:0 0 10px;padding-left:18px;display:grid;gap:5px}
       <li>Anote o número que o ponteiro acabou de passar, não o mais próximo.</li>
       <li>Se o ponteiro parecer estar sobre um número, olhe o mostrador à direita. Se ele ainda não passou do 0, vale o número anterior. Se já passou, vale o número do ponteiro.</li>
       <li>No ciclométrico, se o rolo estiver virando entre dois números, vale o que está saindo (o menor; do 9 para o 0, vale o 9).</li>
-      <li>Com constante: consumo = (leitura atual − leitura anterior) × constante. Se a leitura atual for menor que a anterior, o medidor virou: some 10.000 (4 dígitos) ou 100.000 (5 dígitos) antes de subtrair.</li>
+      <li>Com constante (Calcular consumo): o app calcula o consumo sozinho com a leitura que você digitou: (leitura atual − leitura anterior) × constante. Se a leitura atual for menor que a anterior, o medidor virou: some 10.000 (4 dígitos) ou 100.000 (5 dígitos) antes de subtrair.</li>
+      <li>Somar o mês: o medidor mostra a leitura do mês passado. Leia ela e some o consumo do mês dividido pela constante para achar a leitura atual. Se passar de 9.999 ou 99.999, o medidor virou: tire 10.000 ou 100.000.</li>
       <li>Níveis: Fácil deixa os ponteiros bem no meio. Pegadinhas coloca ponteiros quase em cima do número. Difícil junta várias pegadinhas na mesma leitura e, com constante, inclui medidor que virou.</li>
     </ul>
   </details>
@@ -332,17 +338,17 @@ details.howto ul{margin:0 0 10px;padding-left:18px;display:grid;gap:5px}
 
 <script>
 (function(){
-  var APP_VERSION = '2026.09.24.2330';
+  var APP_VERSION = '2026.09.24.2355';
   document.getElementById('appVersion').textContent = 'Versão ' + APP_VERSION;
 
   var STORE = 'medidor-treino-v1';
   var CONSTS = [2, 4, 5, 10, 20, 40, 60, 80, 120, 200];
-  var state = {meterType:'ponteiro', level:'normal', dials:5, dir:'ltr', constOn:false,
+  var state = {meterType:'ponteiro', level:'normal', dials:5, dir:'ltr', constOn:false, ex:'consumo',
                ok:0, total:0, streak:0, best:0, timed:false, tSum:0, tCount:0, tBest:0};
   try{
     var saved = JSON.parse(localStorage.getItem(STORE) || 'null');
     if(saved && typeof saved === 'object'){
-      ['meterType','level','dials','dir','constOn','ok','total','streak','best','timed','tSum','tCount','tBest'].forEach(function(k){
+      ['meterType','level','dials','dir','constOn','ex','ok','total','streak','best','timed','tSum','tCount','tBest'].forEach(function(k){
         if(saved[k] !== undefined) state[k] = saved[k];
       });
       if(!saved.level && saved.mode) state.level = saved.mode === 'pegadinhas' ? 'pegadinhas' : 'normal';
@@ -352,6 +358,7 @@ details.howto ul{margin:0 0 10px;padding-left:18px;display:grid;gap:5px}
       if(['ponteiro','ciclometrico','eletronico'].indexOf(state.meterType) < 0) state.meterType = 'ponteiro';
       if(['facil','normal','pegadinhas','dificil'].indexOf(state.level) < 0) state.level = 'normal';
       if(state.dir !== 'ltr' && state.dir !== 'rtl') state.dir = 'ltr';
+      if(state.ex !== 'consumo' && state.ex !== 'soma') state.ex = 'consumo';
     }
   }catch(e){}
 
@@ -366,6 +373,8 @@ details.howto ul{margin:0 0 10px;padding-left:18px;display:grid;gap:5px}
   var $dirHint = document.getElementById('dirHint');
   var $consRow = document.getElementById('consRow');
   var $consBox = document.getElementById('consBox');
+  var $consLabel = document.getElementById('consLabel');
+  function isSoma(){ return state.constOn && state.ex === 'soma'; }
 
   function save(){ try{ localStorage.setItem(STORE, JSON.stringify(state)); }catch(e){} }
   function rnd(n){ return Math.floor(Math.random()*n); }
@@ -463,16 +472,29 @@ details.howto ul{margin:0 0 10px;padding-left:18px;display:grid;gap:5px}
       var maxDelta = D === 5 ? 600 : 300;
       var delta = 5 + rnd(maxDelta);
       var wantTurn = (state.level === 'dificil' && Math.random() < 0.4) || (state.level === 'pegadinhas' && Math.random() < 0.15);
-      if(wantTurn){
-        /* força a virada mantendo as pegadinhas dos dígitos de baixo */
-        var low = o.intN % pow10(D-2);
-        o = Object.assign(build(low, o.f), {K:o.K});
-        delta = low + 1 + rnd(400);
+      if(state.ex === 'soma'){
+        /* o medidor mostra a leitura do mês passado; a atual = passada + consumo ÷ constante */
+        if(wantTurn){
+          var hi = (M - pow10(D-2)) + (o.intN % pow10(D-2));
+          o = Object.assign(build(hi, o.f), {K:o.K});
+          delta = (M - hi) + rnd(400);
+        }
+        o.diff = delta;
+        o.cons = delta * o.K;
+        o.target = (o.intN + delta) % M;
+        o.turned = o.intN + delta >= M;
+      }else{
+        if(wantTurn){
+          /* força a virada mantendo as pegadinhas dos dígitos de baixo */
+          var low = o.intN % pow10(D-2);
+          o = Object.assign(build(low, o.f), {K:o.K});
+          delta = low + 1 + rnd(400);
+        }
+        o.prev = ((o.intN - delta) % M + M) % M;
+        o.turned = o.prev > o.intN;
+        o.diff = o.turned ? o.intN + M - o.prev : o.intN - o.prev;
+        o.cons = o.diff * o.K;
       }
-      o.prev = ((o.intN - delta) % M + M) % M;
-      o.turned = o.prev > o.intN;
-      o.diff = o.turned ? o.intN + M - o.prev : o.intN - o.prev;
-      o.cons = o.diff * o.K;
     }
     q = o;
     input = '';
@@ -482,7 +504,7 @@ details.howto ul{margin:0 0 10px;padding-left:18px;display:grid;gap:5px}
 
   /* ---------- desenho do medidor ---------- */
   function plateHtml(){
-    return '<div class="plate" id="plate" hidden><span>Constante de multiplicação <b id="plK"></b></span><span>Leitura anterior <b id="plPrev"></b></span></div>';
+    return '<div class="plate" id="plate" hidden><span id="plA"></span><span id="plB"></span></div>';
   }
   function buildMeter(){
     var D = state.dials;
@@ -534,8 +556,14 @@ details.howto ul{margin:0 0 10px;padding-left:18px;display:grid;gap:5px}
     if(!p) return;
     p.hidden = !state.constOn;
     if(state.constOn && q){
-      document.getElementById('plK').textContent = '× ' + q.K;
-      document.getElementById('plPrev').textContent = pad(q.prev);
+      var A = document.getElementById('plA'), B = document.getElementById('plB');
+      if(state.ex === 'soma'){
+        A.innerHTML = 'Medidor: leitura do mês passado. Constante <b>× ' + q.K + '</b>';
+        B.innerHTML = 'Consumo do mês <b>' + num(q.cons) + ' kWh</b>';
+      }else{
+        A.innerHTML = 'Constante de multiplicação <b>× ' + q.K + '</b>';
+        B.innerHTML = 'Leitura anterior <b>' + pad(q.prev) + '</b>';
+      }
     }
   }
 
@@ -583,6 +611,13 @@ details.howto ul{margin:0 0 10px;padding-left:18px;display:grid;gap:5px}
   }
 
   function readingFull(){ return input.length >= state.dials; }
+  /* consumo calculado sozinho a partir da leitura digitada */
+  function autoCons(){
+    if(!q || !readingFull() || q.prev === undefined) return null;
+    var M = pow10(state.dials), typed = +typedReading(), diff = typed - q.prev;
+    if(diff < 0) diff += M;
+    return diff * q.K;
+  }
 
   function renderBoxes(marks){
     var D = state.dials, h = '', activeSlot = !readingFull() ? slotOf(input.length) : -1;
@@ -600,9 +635,19 @@ details.howto ul{margin:0 0 10px;padding-left:18px;display:grid;gap:5px}
     var cls = 'cons-box';
     if(mark === true) cls += ' ok';
     else if(mark === false) cls += ' bad';
-    else if(readingFull() && !checked) cls += ' active';
+    else if(isSoma() && readingFull() && !checked) cls += ' active';
+    if(!isSoma()) cls += ' auto';
     $consBox.className = cls;
-    $consBox.innerHTML = (cinput ? num(+cinput) : '') + '<span class="unit">kWh</span>';
+    if(isSoma()){
+      $consLabel.textContent = 'Leitura atual';
+      $consBox.setAttribute('aria-label', 'Leitura atual');
+      $consBox.innerHTML = cinput;
+    }else{
+      $consLabel.textContent = 'Consumo';
+      $consBox.setAttribute('aria-label', 'Consumo calculado em kWh');
+      var auto = autoCons();
+      $consBox.innerHTML = (auto === null ? '–' : num(auto)) + '<span class="unit">kWh</span>';
+    }
   }
 
   function renderControls(){
@@ -617,10 +662,13 @@ details.howto ul{margin:0 0 10px;padding-left:18px;display:grid;gap:5px}
     mark('data-timed', function(v){ return (v === '1') === state.timed; });
     mark('data-const', function(v){ return (v === '1') === state.constOn; });
     mark('data-dir', function(v){ return v === state.dir; });
+    mark('data-ex', function(v){ return v === state.ex; });
+    document.getElementById('exSeg').hidden = !state.constOn;
     var h = state.dir === 'rtl'
       ? 'Digitando da direita para a esquerda (comece pela unidade)'
       : 'Digitando da esquerda para a direita';
-    if(state.constOn) h += '. Depois digite o consumo.';
+    if(isSoma()) h = 'Leia o mês passado' + (state.dir === 'rtl' ? ' (da direita para a esquerda)' : '') + '. Depois digite a leitura atual.';
+    else if(state.constOn) h += '. O consumo é calculado sozinho.';
     $dirHint.textContent = h;
     $clock.hidden = !state.timed;
   }
@@ -634,7 +682,7 @@ details.howto ul{margin:0 0 10px;padding-left:18px;display:grid;gap:5px}
     Array.prototype.forEach.call(document.querySelectorAll('[data-timed-only]'), function(el){ el.hidden = !state.timed; });
   }
 
-  function canCheck(){ return readingFull() && (!state.constOn || cinput.length > 0); }
+  function canCheck(){ return readingFull() && (!isSoma() || cinput.length > 0); }
   function renderAction(){
     if(checked){ $go.textContent = 'Próxima leitura'; $go.disabled = false; }
     else{ $go.textContent = 'Conferir'; $go.disabled = !canCheck(); }
@@ -644,15 +692,14 @@ details.howto ul{margin:0 0 10px;padding-left:18px;display:grid;gap:5px}
   function press(d){
     if(checked) return;
     if(!readingFull()){ input += d; }
-    else if(state.constOn && cinput.length < 9){
-      if(cinput === '' && d === '0') return;
+    else if(isSoma() && cinput.length < state.dials){
       cinput += d;
     }else return;
     renderBoxes(); renderCons(); renderAction();
   }
   function back(){
     if(checked) return;
-    if(state.constOn && cinput.length){ cinput = cinput.slice(0,-1); }
+    if(isSoma() && cinput.length){ cinput = cinput.slice(0,-1); }
     else if(input.length){ input = input.slice(0,-1); }
     else return;
     renderBoxes(); renderCons(); renderAction();
@@ -712,16 +759,24 @@ details.howto ul{margin:0 0 10px;padding-left:18px;display:grid;gap:5px}
     }
     var reading = pad(q.intN);
     var consOk = true;
-    if(state.constOn){
-      consOk = +cinput === q.cons;
+    if(isSoma()){
+      consOk = cinput.length > 0 && +cinput === q.target;
+      var Ms = pow10(D), soma = q.intN + q.diff;
+      var calcS = reading+' + '+num(q.cons)+' ÷ '+q.K+' = '+reading+' + '+num(q.diff)+' = '+num(soma);
+      if(q.turned) calcS += '. Passou de '+num(Ms-1)+', então o medidor virou: '+num(soma)+' − '+num(Ms)+' = '+pad(q.target);
+      notes += '<li class="'+(consOk?'ok':'bad')+'"><b>Leitura atual</b><span>Leitura passada + consumo ÷ constante: '+calcS+'.' +
+        (consOk ? '' : ' Você digitou '+cinput+'.') +
+        (!readOk ? ' A conta usa a leitura passada certa.' : '') + '</span></li>';
+    }else if(state.constOn){
+      var mine = autoCons();
+      consOk = readOk;
       var M = pow10(D);
       var calc = q.turned
         ? '('+num(M)+' + '+reading+' − '+pad(q.prev)+') × '+q.K+' = '+num(q.diff)+' × '+q.K+' = '+num(q.cons)+' kWh'
         : '('+reading+' − '+pad(q.prev)+') × '+q.K+' = '+num(q.diff)+' × '+q.K+' = '+num(q.cons)+' kWh';
       var turnNote = q.turned ? ' A leitura atual é menor que a anterior: o medidor virou e passou pelo zero.' : '';
       notes += '<li class="'+(consOk?'ok':'bad')+'"><b>Consumo</b><span>'+calc+'.'+turnNote +
-        (consOk ? '' : ' Você digitou '+num(+cinput)+' kWh.') +
-        (!readOk ? ' A conta usa a leitura certa.' : '') + '</span></li>';
+        (!readOk ? ' Com a leitura que você digitou, o consumo daria '+num(mine)+' kWh.' : '') + '</span></li>';
     }
     var allOk = readOk && consOk;
 
@@ -738,7 +793,12 @@ details.howto ul{margin:0 0 10px;padding-left:18px;display:grid;gap:5px}
     renderCons(state.constOn ? consOk : undefined);
 
     var head;
-    if(allOk) head = 'Certo. A leitura é <span class="reading">'+reading+'</span>' + (state.constOn ? ' e o consumo '+num(q.cons)+' kWh.' : '.');
+    if(isSoma()){
+      if(allOk) head = 'Certo. Mês passado <span class="reading">'+reading+'</span> e leitura atual <span class="reading">'+pad(q.target)+'</span>.';
+      else if(!readOk) head = 'A leitura do mês passado é <span class="reading">'+reading+'</span> e a atual <span class="reading">'+pad(q.target)+'</span>. Você leu <span class="reading">'+typedReading()+'</span>.';
+      else head = 'Mês passado certo, mas a leitura atual é <span class="reading">'+pad(q.target)+'</span>.';
+    }
+    else if(allOk) head = 'Certo. A leitura é <span class="reading">'+reading+'</span>' + (state.constOn ? ' e o consumo '+num(q.cons)+' kWh.' : '.');
     else if(!readOk) head = 'A leitura certa é <span class="reading">'+reading+'</span>. Você digitou <span class="reading">'+typedReading()+'</span>.';
     else head = 'Leitura certa, mas o consumo é '+num(q.cons)+' kWh.';
     $result.className = 'result '+(allOk?'ok':'bad');
@@ -795,6 +855,10 @@ details.howto ul{margin:0 0 10px;padding-left:18px;display:grid;gap:5px}
       var c = b.getAttribute('data-const') === '1';
       if(state.constOn === c) return;
       state.constOn = c; save(); renderControls(); restart(false);
+    }else if(b.hasAttribute('data-ex')){
+      var ex = b.getAttribute('data-ex');
+      if(state.ex === ex) return;
+      state.ex = ex; save(); renderControls(); restart(false);
     }else if(b.hasAttribute('data-timed')){
       var t = b.getAttribute('data-timed') === '1';
       if(state.timed === t) return;
