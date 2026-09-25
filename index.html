@@ -1,1288 +1,860 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Rota do Dia — Faturamento</title>
-
-<link href="https://api.mapbox.com/mapbox-gl-js/v3.30.0/mapbox-gl.css" rel="stylesheet">
-<script src="https://api.mapbox.com/mapbox-gl-js/v3.30.0/mapbox-gl.js"></script>
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="author" content="Luís Ricardo de Almeida Siqueira">
+<meta name="copyright" content="© 2026 Luís Ricardo de Almeida Siqueira — Todos os direitos reservados.">
+<meta name="app-version" content="2026.09.24.2330">
+<title>Treino de leitura de medidores</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#1C272D">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Treino de Ponteiro">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<link rel="icon" href="data:image/png;base64,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">
 <style>
 :root{
-  --bg:#f2f3f5;
-  --card:#fff;
-  --text:#1f2328;
-  --muted:#6b7078;
-  --primary:#4a4f57;
-  --primary-dark:#33373d;
-  --border:#d9dce1;
-  --danger:#c62828;
-  --soft:#eceef1;
-  --shadow:0 3px 14px rgba(0,0,0,.08);
+  color-scheme: light dark;
+  --bg:#E8ECEA; --ink:#18252C; --muted:#556670; --panel:#F7F9F8; --line:#C3CDC9;
+  --accent:#1F6F8B; --on-accent:#FFFFFF; --ok:#1D7F51; --bad:#BF3B28;
+  --housing:#2C3F48; --housing-line:#1A2A31; --housing-ink:#D3E0E4;
+  --ok-hi:#5AD59A; --bad-hi:#FF8F7A;
+  --face:#F4F6F1; --face-edge:#8E9B96; --face-ink:#1B262B; --needle:#1B262B; --tip:#D6402B;
+  --plate:#E9DFC4; --plate-ink:#2B2416;
 }
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1C272D; --ink:#EEF3F5; --muted:#A9B8BF; --panel:#27363D; --line:#3D515B;
+    --accent:#6CC4E0; --on-accent:#0B1418; --ok:#5BD49C; --bad:#FF907D;
+    --housing:#2A3B43; --housing-line:#465B66; --face:#EEF1EC; --face-edge:#8A9893;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1C272D; --ink:#EEF3F5; --muted:#A9B8BF; --panel:#27363D; --line:#3D515B;
+  --accent:#6CC4E0; --on-accent:#0B1418; --ok:#5BD49C; --bad:#FF907D;
+  --housing:#2A3B43; --housing-line:#465B66; --face:#EEF1EC; --face-edge:#8A9893;
+}
+
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
-body.dark{--bg:#121315;--card:#1c1d20;--text:#ececee;--muted:#a9adb3;--border:#3a3c41;--soft:#2a2c30;--primary:#5a6069;--primary-dark:#6b7078;--shadow:0 3px 16px rgba(0,0,0,.35)}
-.container{max-width:480px;margin:auto;padding:12px}
-header{background:var(--primary);color:#fff;border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:var(--shadow)}
-header h1{margin:0;font-size:21px}
-header p{margin:5px 0 0;font-size:13px;opacity:.92}
-.header-actions{display:flex;gap:8px;margin-top:12px}
-.header-actions button{flex:1;background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.25);padding:9px 8px;font-size:12px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:var(--shadow)}
-.section-title{font-size:15px;font-weight:bold;margin-bottom:9px}
-label{display:block;font-size:13px;font-weight:bold;margin-bottom:6px}
-input[type=text],input[type=date],input[type=number]{width:100%;padding:12px;border:1px solid var(--border);border-radius:10px;background:var(--card);color:var(--text);font-size:15px;outline:none}
-input:focus{border-color:var(--primary)}
-.row{display:flex;gap:7px;align-items:center}.row input{flex:1}
-button{border:0;border-radius:10px;padding:11px 13px;font-size:14px;font-weight:bold;cursor:pointer}
-button:disabled{opacity:.55;cursor:not-allowed}
-.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-dark)}
-.btn-secondary{background:var(--soft);color:var(--text)}
-.btn-danger{background:#fbe8e8;color:var(--danger)}
-.btn-small{padding:8px 10px;font-size:13px}.full{width:100%}
-.hint{color:var(--muted);font-size:12px;line-height:1.4;margin-top:7px}
-.saved-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.chip-wrap{display:inline-flex;align-items:center;background:var(--soft);border:1px solid var(--border);border-radius:20px;overflow:hidden}
-.chip{background:transparent;color:var(--primary);border:0;border-radius:0;padding:7px 8px 7px 10px;font-size:12px}
-.chip-delete{background:transparent;color:var(--danger);border:0;border-left:1px solid var(--border);border-radius:0;padding:7px 9px;font-size:14px;line-height:1}
-.street{border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:9px}
-.street-top{display:flex;align-items:center;gap:7px;margin-bottom:8px}
-.street-number{width:30px;height:30px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:bold;flex:none}
-.street-name{flex:1;min-width:0}
-.street-actions{display:flex;gap:5px}
-.street-bottom{display:flex;gap:7px}.street-bottom input{min-width:0}
-.checkbox{display:flex;align-items:center;gap:8px;font-size:13px}.checkbox input{width:18px;height:18px}
-.actions{display:flex;flex-direction:column;gap:8px}
-#resultado{display:none}
-.result-head{display:flex;justify-content:space-between;align-items:center}
-.timestamp{color:var(--muted);font-size:11px}
-.aviso-gps{display:none;background:#eceef1;color:#3b3f45;border:1px solid #d0d3d8;border-radius:10px;padding:9px;margin-top:8px;font-size:12px;line-height:1.4}
-body.dark .aviso-gps{background:#2a2c30;color:#d4d7dc;border-color:#3a3c41}
-.stop{display:flex;align-items:center;gap:9px;border:1px solid var(--border);border-radius:12px;padding:9px;margin-top:8px}
-.stop-number{width:30px;height:30px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:bold;flex:none}
-.stop-number.start{background:#1f2328}
-.stop-info{flex:1;min-width:0}.stop-name{font-size:14px;font-weight:bold;word-break:break-word}
-.stop-coords{font-size:10px;color:var(--muted);margin-top:2px}
-.stop-controls{display:flex;flex-direction:column;gap:3px}
-.stop-edit{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap}
-.stop-edit button{padding:6px 10px;font-size:12px}
-.move{width:31px;height:27px;padding:0;background:var(--soft);color:var(--text)}
-.start-badge{display:inline-block;margin-top:5px;font-size:10px;background:#e6e8eb;color:var(--primary);border-radius:10px;padding:3px 7px}
-body.dark .start-badge{background:#2f3237;color:#d4d7dc}
-.mapbox-wrap{padding:10px}.map-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
-.map-head strong{font-size:15px}.map-status{font-size:11px;color:var(--muted);text-align:right}
-#map{width:100%;height:330px;border-radius:12px;overflow:hidden;background:#dfe1e4}
-.map-note{font-size:10px;color:var(--muted);line-height:1.35;margin-top:7px}
-.map-marker{width:31px;height:31px;border-radius:50%;background:var(--primary);border:3px solid #fff;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:bold;box-shadow:0 2px 8px rgba(0,0,0,.35)}
-.map-marker.start{background:#1f2328}
-.map-marker.salvo{background:#6b7078;font-size:14px}
-.ponto{display:flex;gap:9px;align-items:flex-start;border:1px solid var(--border);border-radius:12px;padding:10px;margin-top:8px}
-.ponto-info{flex:1;min-width:0}
-.ponto-titulo{font-size:14px;font-weight:bold;word-break:break-word}
-.ponto-linha{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.35;word-break:break-word}
-.ponto-acoes{display:flex;flex-direction:column;gap:5px}
-.ponto-acoes button{padding:7px 9px;font-size:12px;white-space:nowrap}
-.help-card{display:none}
-.help-card.open{display:block}
-.help-list{margin:0;padding-left:20px;color:var(--text);font-size:13px;line-height:1.55}
-.help-list li{margin-bottom:7px}
-.help-tip{background:var(--soft);border-radius:10px;padding:10px;margin-top:10px;font-size:12px;line-height:1.45;color:var(--text)}
-footer{text-align:center;color:var(--muted);font-size:11px;padding:16px 5px 24px}
-.lembrete-mapa{display:none;background:#eceef1;color:#1f2328;border:1px solid #d0d3d8;border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:var(--shadow)}
-.lembrete-mapa.on{display:block}
-body.dark .lembrete-mapa{background:#23252a;color:#ececee;border-color:#3a3c41}
-.lembrete-mapa .section-title{margin-bottom:6px}
-.lembrete-mapa ol{margin:6px 0 12px;padding-left:20px;font-size:13px;line-height:1.55}
-.lembrete-mapa .btn-mapa{background:#4a4f57;color:#fff;width:100%;font-size:15px;padding:13px}
-.lembrete-mapa .btn-depois{background:transparent;color:inherit;width:100%;font-size:12px;font-weight:normal;margin-top:6px;text-decoration:underline}
-.offline-banner{display:none;background:#eceef1;color:#3b3f45;border:1px solid #d0d3d8;border-radius:12px;padding:10px 12px;margin-bottom:12px;font-size:12px;line-height:1.4}
-.offline-banner.on{display:block}
-body.dark .offline-banner{background:#2a2c30;color:#d4d7dc;border-color:#3a3c41}
-.street-endereco{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.35}
-.street-endereco:empty{display:none}
-.theme{position:fixed;right:12px;bottom:12px;z-index:20;width:44px;height:44px;padding:0;border-radius:50%;background:var(--primary);color:#fff;box-shadow:var(--shadow)}
+[hidden]{display:none !important}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:'Barlow',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  font-size:15px; line-height:1.4;
+}
+main{max-width:480px;margin:0 auto;padding:10px 12px 20px;display:grid;gap:8px}
+header{display:flex;align-items:flex-start;gap:10px}
+header .titles{flex:1;min-width:0}
+h1{
+  font-family:'Barlow Condensed','Arial Narrow','Roboto Condensed',system-ui,sans-serif;
+  font-size:1.4rem;line-height:1.05;font-weight:700;margin:0;
+}
+.sub{margin:2px 0 0;color:var(--muted);font-size:.85rem}
+.refresh{
+  flex:none;width:36px;height:36px;border-radius:50%;
+  border:1px solid var(--line);background:var(--panel);color:var(--ink);
+  font-size:1.25rem;line-height:1;cursor:pointer;display:grid;place-items:center;padding:0;
+}
+.refresh:active{background:var(--line)}
+.refresh.spin{animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.controls{display:flex;flex-wrap:wrap;gap:5px}
+.seg{display:inline-flex;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:2px}
+.seg button{
+  font:inherit;font-size:.82rem;font-weight:500;color:var(--ink);
+  background:transparent;border:0;border-radius:7px;
+  padding:4px 8px;cursor:pointer;min-height:28px;white-space:nowrap;
+}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
+.seg.full{width:100%;display:flex}
+.seg.full button{flex:1;padding:4px 4px}
+
+button:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+.meter{display:grid;gap:6px}
+.meter svg{width:100%;height:auto;display:block}
+.model-card{
+  width:100%;min-height:120px;background:var(--housing);border:2px solid var(--housing-line);
+  border-radius:14px;display:flex;align-items:center;justify-content:center;padding:12px;
+}
+.digital-meter{
+  width:100%;background:#16222A;border:3px solid #3E525C;border-radius:12px;
+  padding:12px 10px;text-align:center;box-shadow:inset 0 0 0 2px #1E2D34;
+}
+.digital-label{font-size:11px;letter-spacing:.04em;color:#A3B5BC;margin-bottom:6px}
+.digital-value{
+  display:inline-block;min-width:170px;padding:7px 10px;border-radius:7px;
+  background:#DDE5D8;color:#142018;font-family:monospace;font-size:30px;font-weight:700;
+  letter-spacing:.12em;line-height:1.05;
+}
+.cyclo-meter{display:flex;gap:4px;align-items:center;justify-content:center;flex-wrap:nowrap}
+.cyclo-wheel{
+  width:40px;height:66px;border-radius:7px;border:2px solid #7A8A8E;background:#ECEFE9;
+  color:#172226;overflow:hidden;position:relative;
+  font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:700;
+  box-shadow:inset 0 8px 0 rgba(0,0,0,.05), inset 0 -8px 0 rgba(0,0,0,.06);
+}
+.cyclo-strip{height:200%;display:flex;flex-direction:column;transition:transform .9s cubic-bezier(.25,.8,.25,1)}
+.cyclo-strip span{height:50%;display:flex;align-items:center;justify-content:center;flex:none}
+.cyclo-wheel.ok{border-color:var(--ok-hi);box-shadow:0 0 0 2px var(--ok-hi)}
+.cyclo-wheel.bad{border-color:var(--bad-hi);box-shadow:0 0 0 2px var(--bad-hi)}
+.model-caption{color:var(--housing-ink);font-size:11px;text-align:center;margin-top:7px}
+
+.plate{
+  background:var(--plate);color:var(--plate-ink);border-radius:8px;
+  padding:6px 10px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
+  font-size:.85rem;border:1px solid rgba(0,0,0,.15);
+}
+.plate b{font-family:'Barlow Condensed',sans-serif;font-size:1.05rem;font-variant-numeric:tabular-nums}
+
+.housing{fill:var(--housing);stroke:var(--housing-line);stroke-width:2}
+.lab{fill:var(--housing-ink);font-family:'Barlow',system-ui,sans-serif;font-weight:600;font-size:13px;text-anchor:middle}
+.face{fill:var(--face);stroke:var(--face-edge);stroke-width:1.5}
+.tick{stroke:var(--face-ink);stroke-width:1.4}
+.tick.minor{stroke-width:.9;opacity:.65}
+.num{fill:var(--face-ink);font-family:'Barlow Condensed','Arial Narrow',system-ui,sans-serif;font-weight:600;font-size:15px;text-anchor:middle;dominant-baseline:central}
+.needle{transition:transform 1.1s cubic-bezier(.25,.8,.25,1)}
+.needle .body{fill:var(--needle)}
+.needle .tip{fill:var(--tip)}
+.hub{fill:var(--needle)}
+.hub-dot{fill:var(--face)}
+.ring{fill:none;stroke:transparent;stroke-width:3.5}
+.ring.ok{stroke:var(--ok-hi)}
+.ring.bad{stroke:var(--bad-hi)}
+.ans{font-family:'Barlow Condensed','Arial Narrow',system-ui,sans-serif;font-weight:700;font-size:22px;text-anchor:middle;fill:var(--housing-ink)}
+.ans.ok{fill:var(--ok-hi)}
+.ans.bad{fill:var(--bad-hi)}
+
+.answer{display:grid;gap:7px}
+.dir-hint{text-align:center;color:var(--muted);font-size:.8rem;margin:0}
+.clock{
+  text-align:center;line-height:1;
+  font-family:'Barlow Condensed','Arial Narrow',system-ui,sans-serif;
+  font-size:1.35rem;font-weight:600;font-variant-numeric:tabular-nums;color:var(--muted);
+}
+.clock.running{color:var(--ink)}
+.timeline{margin:4px 0 0;color:var(--muted);font-variant-numeric:tabular-nums}
+.boxes{display:flex;gap:5px;justify-content:center}
+.box{
+  width:38px;height:44px;border:2px solid var(--line);border-radius:9px;background:var(--panel);
+  display:grid;place-items:center;
+  font-family:'Barlow Condensed','Arial Narrow',system-ui,sans-serif;
+  font-size:1.6rem;font-weight:600;font-variant-numeric:tabular-nums;
+}
+.box.active{border-color:var(--accent)}
+.box.ok{border-color:var(--ok);color:var(--ok)}
+.box.bad{border-color:var(--bad);color:var(--bad)}
+
+.cons{display:flex;align-items:center;gap:8px;justify-content:center}
+.cons label{font-size:.85rem;color:var(--muted);white-space:nowrap}
+.cons-box{
+  min-width:130px;height:40px;padding:0 10px;border:2px solid var(--line);border-radius:9px;background:var(--panel);
+  display:flex;align-items:center;justify-content:flex-end;
+  font-family:'Barlow Condensed','Arial Narrow',system-ui,sans-serif;font-size:1.45rem;font-weight:600;
+  font-variant-numeric:tabular-nums;cursor:pointer;
+}
+.cons-box.active{border-color:var(--accent)}
+.cons-box.ok{border-color:var(--ok);color:var(--ok)}
+.cons-box.bad{border-color:var(--bad);color:var(--bad)}
+.cons-box .unit{font-size:.85rem;color:var(--muted);margin-left:4px;font-family:'Barlow',sans-serif}
+
+.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.key{
+  font:inherit;font-size:1.1rem;font-weight:500;color:var(--ink);
+  background:var(--panel);border:1px solid var(--line);border-radius:9px;
+  min-height:38px;cursor:pointer;font-variant-numeric:tabular-nums;
+}
+.key:active{background:var(--line)}
+.key:disabled{opacity:.45;cursor:default}
+.key.blank{visibility:hidden}
+
+.go{
+  font:inherit;font-size:.95rem;font-weight:600;background:var(--accent);color:var(--on-accent);
+  border:0;border-radius:9px;min-height:40px;width:100%;cursor:pointer;
+}
+.go:disabled{opacity:.45;cursor:default}
+.next-reading{
+  font:inherit;font-size:.85rem;font-weight:600;background:var(--panel);color:var(--ink);
+  border:1px solid var(--line);border-radius:9px;min-height:34px;width:100%;cursor:pointer;
+}
+.next-reading:active{background:var(--line)}
+
+.result{
+  background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--line);
+  border-radius:9px;padding:9px 11px;font-size:.9rem;
+}
+.result.ok{border-left-color:var(--ok)}
+.result.bad{border-left-color:var(--bad)}
+.result h2{
+  margin:0;font-family:'Barlow Condensed','Arial Narrow',system-ui,sans-serif;
+  font-size:1.1rem;line-height:1.15;font-weight:700;
+}
+.result .reading{font-variant-numeric:tabular-nums}
+.notes{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:8px}
+.notes li{padding-left:10px;border-left:3px solid var(--line)}
+.notes li.bad{border-left-color:var(--bad)}
+.notes li.ok{border-left-color:var(--ok)}
+.notes b{display:block;font-weight:600}
+.notes span{color:var(--muted)}
+
+.stats{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end}
+.stat{display:grid}
+.stat strong{
+  font-family:'Barlow Condensed','Arial Narrow',system-ui,sans-serif;
+  font-size:1.2rem;line-height:1;font-weight:700;font-variant-numeric:tabular-nums;
+}
+.stat span{color:var(--muted);font-size:.78rem}
+.reset{
+  font:inherit;font-size:.8rem;color:var(--muted);background:none;border:0;padding:4px 0;
+  text-decoration:underline;cursor:pointer;margin-left:auto;
+}
+
+details.howto{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:0 11px;font-size:.88rem}
+details.howto summary{cursor:pointer;font-weight:600;padding:7px 0}
+details.howto ul{margin:0 0 10px;padding-left:18px;display:grid;gap:5px}
+
+.share-app{
+  font:inherit;font-size:.85rem;font-weight:600;background:var(--panel);color:var(--ink);
+  border:1px solid var(--line);border-radius:9px;min-height:34px;width:100%;cursor:pointer;
+}
+.share-app:active{background:var(--line)}
+.app-footer{text-align:center;color:var(--muted);font-size:.75rem;line-height:1.5;padding:2px 8px 0}
+.app-footer p{margin:0}
+
+@media (max-width:380px){
+  .seg button{padding:4px 6px;font-size:.78rem}
+  .box{width:34px;height:40px;font-size:1.45rem}
+  .key{min-height:36px}
+  .digital-value{min-width:150px;font-size:26px}
+  .cyclo-wheel{width:36px;height:60px;font-size:32px}
+  .cons-box{min-width:110px}
+}
+@media (prefers-reduced-motion: reduce){
+  .needle,.cyclo-strip{transition:none}
+  .refresh.spin{animation:none}
+}
 </style>
-
-<link rel="icon" type="image/png" sizes="512x512" href="app-icon.png">
-<link rel="apple-touch-icon" sizes="512x512" href="app-icon.png">
-<link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#4a4f57">
-
 </head>
-
 <body>
-<div class="container">
-
-<header>
-  <h1>Rota do Dia — Faturamento</h1>
-  <p>Organize suas ruas e encontre uma ordem prática para a rota.</p>
-  <div class="header-actions">
-    <button id="comoUsar">📖 Como usar</button>
-    <button id="atualizarApp">🔄 Atualizar aplicativo</button>
-  </div>
-</header>
-
-<div class="lembrete-mapa" id="lembreteMapa">
-  <div class="section-title">🗺️ Hora de atualizar o mapa</div>
-  <div style="font-size:13px;line-height:1.45">Para o Google Maps funcionar <b>sem internet</b> na rua, o mapa precisa estar baixado e atualizado. Toque no botão abaixo e faça assim:</div>
-  <ol>
-    <li>Toque na sua <b>foto</b> (canto de cima).</li>
-    <li>Toque em <b>Mapas off-line</b>.</li>
-    <li>Se não tiver mapa, toque em <b>Selecionar seu mapa</b>, cubra a cidade e toque em <b>Fazer download</b>.</li>
-    <li>Toque na <b>engrenagem ⚙️</b> e ligue <b>Atualizar mapas off-line automaticamente</b>.</li>
-  </ol>
-  <button class="btn-mapa" id="atualizarMapaBtn">🗺️ Atualizar mapa</button>
-  <button class="btn-depois" id="lembrarDepoisBtn">Lembrar depois</button>
-</div>
-
-<div class="offline-banner" id="offlineBanner">📴 <b>Sem internet.</b> Você pode adicionar coordenadas e sua posição normalmente. O mapa, a busca de ruas novas e o trajeto voltam sozinhos quando o sinal voltar.</div>
-
-<div class="card help-card" id="ajuda">
-  <div class="section-title">📖 Como usar o aplicativo</div>
-  <ol class="help-list">
-    <li><b>Escolha a data</b> da rota.</li>
-    <li>Digite a <b>cidade ou região</b>. O botão 📍 pode identificar a cidade pela sua localização.</li>
-    <li>Em <b>Ruas da rota</b>, digite o nome da rua e, se quiser, informe o <b>Nº inicial e Nº final</b>.</li>
-    <li>Para guardar uma rua para usar novamente, toque na <b>☆</b> ao lado da rua. Ela aparecerá embaixo como favorita.</li>
-    <li>Para apagar uma rua favorita, toque na <b>🗑️ lixeira</b> que aparece ao lado do nome dela.</li>
-    <li>Use <b>📍 Preencher ruas de um bairro inteiro</b> se quiser buscar automaticamente as ruas de um bairro.</li>
-    <li>Se quiser guardar uma lista inteira de ruas, use <b>💾 Salvar esta lista como etapa</b>.</li>
-    <li>Deixe <b>Usar minha localização atual como ponto de partida</b> marcado para começar a rota a partir de onde você está. Se o aparelho não liberar a localização, o aplicativo avisa e pergunta se deseja continuar pela primeira rua.</li>
-    <li>Use <b>📍 Adicionar minha posição aqui</b> para colocar na lista a coordenada exata de onde você está, sem digitar. Funciona mesmo sem internet; o nome da rua aparece quando o sinal voltar.</li>
-    <li><b>Sem internet:</b> o aplicativo abre normalmente (depois de ter sido aberto uma vez com internet). Coordenadas, sua posição e ruas que já foram buscadas antes continuam funcionando. O mapa e o trajeto aparecem quando o sinal voltar.</li>
-    <li><b>🔢 Medidores:</b> parado no local, toque em <b>📍 Salvar minha posição com nº do medidor</b>. Depois, em qualquer mês, digite o número em <b>Buscar pelo nº do medidor</b> e toque em <b>➕ Rota</b>, ou digite o número direto no campo da rua.</li>
-    <li><b>🗺️ Ver meus pontos salvos no mapa</b> mostra todos os medidores e coordenadas salvos (estrelas ★). Para voltar a ver a rota, calcule de novo ou mude a ordem.</li>
-    <li><b>🗺️ Atualizar mapa:</b> a cada 6 meses aparece um aviso no topo. Toque em <b>Atualizar mapa</b>, o Google Maps abre, e siga os passos do aviso.</li>
-    <li><b>💾 Backup:</b> seus dados ficam só neste celular. Use <b>📤 Exportar backup</b> de vez em quando e guarde o arquivo. Para recuperar, toque em <b>📥 Importar backup</b> e escolha o arquivo.</li>
-    <li>Toque em <b>🚗 Calcular melhor rota</b>. O aplicativo organiza os pontos por proximidade.</li>
-    <li>Depois do cálculo, use as setas <b>▲ ▼</b> para mudar manualmente a ordem. O ponto de partida pelo GPS fica fixo no topo.</li>
-    <li>Quando estiver tudo certo, use <b>🗺️ Abrir rota no Google Maps</b> para navegar ou <b>📤 Compartilhar rota</b> para enviar a rota.</li>
-  </ol>
-  <div class="help-tip">
-    <b>Dica:</b> o botão <b>🔄 Atualizar aplicativo</b> serve para carregar a versão mais nova do aplicativo depois que uma atualização for publicada. Suas ruas favoritas, cidades salvas e etapas ficam guardadas no aparelho.
-  </div>
-</div>
-
-<div class="card">
-  <div class="section-title">Data da rota</div>
-  <input type="date" id="dataRota">
-
-  <div style="height:12px"></div>
-  <div class="section-title">Cidade / região</div>
-  <div class="row">
-    <input type="text" id="cidade" placeholder="Digite a cidade ou região" autocomplete="off">
-    <button class="btn-secondary btn-small" id="gpsCidade">📍</button>
-    <button class="btn-secondary btn-small" id="salvarCidade">☆</button>
-  </div>
-  <div id="cidadesSalvas" class="saved-list"></div>
-  <div class="hint">Aceita qualquer cidade ou região. Se necessário, você também pode informar coordenadas no campo da rua, por exemplo: <b>-23.1234, -47.5678</b>.</div>
-</div>
-
-<div class="card">
-  <div class="section-title">Ruas da rota</div>
-  <div id="ruas"></div>
-  <button class="btn-secondary full" id="adicionarRua">＋ Adicionar rua</button>
-  <div style="height:8px"></div>
-  <button class="btn-secondary full" id="adicionarPosicao">📍 Adicionar minha posição aqui</button>
-  <div style="height:8px"></div>
-  <button class="btn-secondary full" id="bairroInteiro">📍 Preencher ruas de um bairro inteiro</button>
-  <div id="ruasSalvas" class="saved-list"></div>
-</div>
-
-<div class="card">
-  <div class="section-title">🔢 Medidores e pontos salvos</div>
-  <div class="row">
-    <input type="text" id="buscaMedidor" placeholder="Buscar pelo nº do medidor" autocomplete="off" inputmode="text">
-    <button class="btn-secondary btn-small" id="limparBusca">✕</button>
-  </div>
-  <div id="pontosLista"></div>
-  <div style="height:10px"></div>
-  <div class="actions">
-    <button class="btn-primary full" id="salvarPosicaoMedidor">📍 Salvar minha posição com nº do medidor</button>
-    <button class="btn-secondary full" id="verPontosMapa">🗺️ Ver meus pontos salvos no mapa</button>
-  </div>
-  <div class="hint">A busca encontra os medidores que <b>você</b> salvou neste aparelho. Parado no local, toque em <b>📍 Salvar minha posição</b> e digite o nº do medidor. Depois é só buscar pelo número e tocar em <b>➕ Rota</b>. Também dá para digitar o nº do medidor direto no campo da rua.</div>
-</div>
-
-<div class="card">
-  <button class="btn-secondary full" id="salvarEtapa">💾 Salvar esta lista como etapa</button>
-  <div id="etapasSalvas" class="saved-list"></div>
-</div>
-
-<div class="card">
-  <div class="section-title">💾 Backup dos seus dados</div>
-  <div class="actions">
-    <button class="btn-secondary full" id="exportarBackup">📤 Exportar backup</button>
-    <button class="btn-secondary full" id="importarBackup">📥 Importar backup</button>
-  </div>
-  <input type="file" id="arquivoBackup" accept=".json,application/json" style="display:none">
-  <div class="hint" id="infoBackup">Guarda medidores, favoritos, coordenadas, cidades, etapas e a última rota num arquivo. Salve em Arquivos, iCloud ou mande pelo WhatsApp. Se limpar o navegador ou trocar de celular, é só importar.</div>
-</div>
-
-<div class="card">
-  <label class="checkbox">
-    <input type="checkbox" id="usarGps" checked>
-    <span>Usar minha localização atual como ponto de partida</span>
-  </label>
-  <div class="hint" style="margin-top:6px">
-    <b>Marcado:</b> a rota começa de onde você está agora.<br>
-    <b>Desmarcado:</b> a rota começa pela primeira rua da lista.
-  </div>
-  <div style="height:10px"></div>
-  <button class="btn-primary full" id="calcular">🚗 Calcular melhor rota</button>
-  <div class="hint">A ordem inicial é calculada pelas coordenadas. Depois você pode ajustar manualmente usando as setas.</div>
-</div>
-
-<div class="card" id="resultado">
-  <div class="result-head">
-    <div>
-      <div class="section-title" style="margin-bottom:2px">Ordem sugerida</div>
-      <div class="timestamp" id="timestamp"></div>
+<main>
+  <header>
+    <div class="titles">
+      <h1>Treino de leitura de medidores</h1>
+      <p class="sub">Escolha o modelo do medidor e digite a leitura.</p>
     </div>
-    <button class="btn-danger btn-small" id="limparRota">🗑️ Limpar rota</button>
-  </div>
-  <div class="aviso-gps" id="avisoGps"></div>
-  <div id="stopsList"></div>
-</div>
+    <button type="button" class="refresh" id="refreshApp" aria-label="Atualizar aplicativo" title="Atualizar">↻</button>
+  </header>
 
-<div class="card mapbox-wrap">
-  <div class="map-head">
-    <strong>🗺️ Mapa da rota</strong>
-    <span class="map-status" id="mapStatus">Configure o token do Mapbox</span>
-  </div>
-  <div id="map"></div>
-  <div class="map-note">A linha segue as ruas de carro, na ordem da lista. Distância e tempo são estimativas; para navegar com voz, use o Google Maps.</div>
-</div>
+  <section class="controls" aria-label="Configurações">
+    <div class="seg full" role="group" aria-label="Modelo de medidor">
+      <button type="button" data-meter-type="ponteiro" aria-pressed="true">Ponteiro</button>
+      <button type="button" data-meter-type="ciclometrico" aria-pressed="false">Ciclométrico</button>
+      <button type="button" data-meter-type="eletronico" aria-pressed="false">Eletrônico</button>
+    </div>
+    <div class="seg full" role="group" aria-label="Nível">
+      <button type="button" data-level="facil" aria-pressed="false">Fácil</button>
+      <button type="button" data-level="normal" aria-pressed="true">Normal</button>
+      <button type="button" data-level="pegadinhas" aria-pressed="false">Pegadinhas</button>
+      <button type="button" data-level="dificil" aria-pressed="false">Difícil</button>
+    </div>
+    <div class="seg" role="group" aria-label="Quantidade de dígitos">
+      <button type="button" data-dials="4" aria-pressed="false">4 dígitos</button>
+      <button type="button" data-dials="5" aria-pressed="true">5 dígitos</button>
+    </div>
+    <div class="seg" role="group" aria-label="Constante de multiplicação">
+      <button type="button" data-const="0" aria-pressed="true">Sem constante</button>
+      <button type="button" data-const="1" aria-pressed="false">Com constante</button>
+    </div>
+    <div class="seg" role="group" aria-label="Tempo">
+      <button type="button" data-timed="0" aria-pressed="true">Sem tempo</button>
+      <button type="button" data-timed="1" aria-pressed="false">Cronômetro</button>
+    </div>
+    <div class="seg" role="group" aria-label="Sentido da digitação">
+      <button type="button" data-dir="ltr" aria-pressed="true">Digitar: esq. → dir.</button>
+      <button type="button" data-dir="rtl" aria-pressed="false">dir. → esq.</button>
+    </div>
+  </section>
 
-<div class="card">
-  <div class="actions">
-    <button class="btn-primary full" id="abrirGoogle">🗺️ Abrir rota no Google Maps</button>
-    <button class="btn-secondary full" id="compartilhar">📤 Compartilhar rota</button>
-    <button class="btn-secondary full" id="compartilharApp">📲 Compartilhar aplicativo</button>
-  </div>
-</div>
+  <section class="meter" id="meter"></section>
 
-<footer>© 2026 Luís Ricardo de Almeida Siqueira — Todos os direitos reservados.</footer>
-</div>
+  <section class="answer" aria-label="Sua leitura">
+    <div class="clock" id="clock" hidden>0,0 s</div>
+    <p class="dir-hint" id="dirHint"></p>
+    <div class="boxes" id="boxes" aria-live="polite"></div>
+    <div class="cons" id="consRow" hidden>
+      <label for="consBox">Consumo</label>
+      <div class="cons-box" id="consBox" role="textbox" aria-label="Consumo em kWh"></div>
+    </div>
+    <div class="keypad" id="keypad"></div>
+    <button type="button" class="go" id="go" disabled>Conferir</button>
+    <button type="button" class="next-reading" id="nextReading">⏭ Pular para próxima leitura</button>
+  </section>
 
-<button class="theme" id="tema">🌙</button>
+  <section class="result" id="result" hidden aria-live="polite"></section>
+
+  <section class="stats" aria-label="Placar">
+    <div class="stat"><strong id="stOk">0 de 0</strong><span>Acertos</span></div>
+    <div class="stat"><strong id="stStreak">0</strong><span>Sequência</span></div>
+    <div class="stat"><strong id="stBest">0</strong><span>Melhor</span></div>
+    <div class="stat" data-timed-only hidden><strong id="stAvg">–</strong><span>Tempo médio</span></div>
+    <div class="stat" data-timed-only hidden><strong id="stFast">–</strong><span>Melhor tempo</span></div>
+    <button type="button" class="reset" id="reset">Zerar placar</button>
+  </section>
+
+  <details class="howto">
+    <summary>Como ler o medidor</summary>
+    <ul>
+      <li>Você pode ler da esquerda para a direita ou da direita para a esquerda. Escolha o sentido em "Digitar" e os quadros se preenchem na mesma ordem.</li>
+      <li>Os ponteiros giram em sentidos alternados. Siga a ordem dos números impressos em cada mostrador.</li>
+      <li>Anote o número que o ponteiro acabou de passar, não o mais próximo.</li>
+      <li>Se o ponteiro parecer estar sobre um número, olhe o mostrador à direita. Se ele ainda não passou do 0, vale o número anterior. Se já passou, vale o número do ponteiro.</li>
+      <li>No ciclométrico, se o rolo estiver virando entre dois números, vale o que está saindo (o menor; do 9 para o 0, vale o 9).</li>
+      <li>Com constante: consumo = (leitura atual − leitura anterior) × constante. Se a leitura atual for menor que a anterior, o medidor virou: some 10.000 (4 dígitos) ou 100.000 (5 dígitos) antes de subtrair.</li>
+      <li>Níveis: Fácil deixa os ponteiros bem no meio. Pegadinhas coloca ponteiros quase em cima do número. Difícil junta várias pegadinhas na mesma leitura e, com constante, inclui medidor que virou.</li>
+    </ul>
+  </details>
+
+  <button type="button" class="share-app" id="shareApp">↗ Compartilhar aplicativo</button>
+
+  <footer class="app-footer">
+    <p>Desenvolvido por Luís Ricardo de Almeida Siqueira</p>
+    <p>© 2026 Luís Ricardo de Almeida Siqueira — Todos os direitos reservados.</p>
+    <p id="appVersion"></p>
+  </footer>
+</main>
 
 <script>
-/* ==========================================================
-   MAPBOX
-   Cole aqui seu token PUBLICO que começa com pk.
-   ========================================================== */
-const MAPBOX_TOKEN = "pk.eyJ1IjoibHVpc3NpcXVlaXJhIiwiYSI6ImNtdWE3eWlkYzFhaWkyd29rdTE1azczOW0ifQ.obU3pPCEHP856-OvuFE19g";
+(function(){
+  var APP_VERSION = '2026.09.24.2330';
+  document.getElementById('appVersion').textContent = 'Versão ' + APP_VERSION;
 
-const dataRotaEl=document.getElementById("dataRota");
-const cidadeEl=document.getElementById("cidade");
-const ruasEl=document.getElementById("ruas");
-const resultadoEl=document.getElementById("resultado");
-const stopsListEl=document.getElementById("stopsList");
-const timestampEl=document.getElementById("timestamp");
-const cidadesSalvasEl=document.getElementById("cidadesSalvas");
-const ruasSalvasEl=document.getElementById("ruasSalvas");
-const etapasSalvasEl=document.getElementById("etapasSalvas");
-const usarGpsEl=document.getElementById("usarGps");
-const mapStatusEl=document.getElementById("mapStatus");
-const avisoGpsEl=document.getElementById("avisoGps");
-
-let currentStops=[];
-let map=null;
-let markers=[];
-
-function hojeISO(){
-  const d=new Date();
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-}
-dataRotaEl.value=hojeISO();
-
-function escapeHtml(v){
-  return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;");
-}
-
-/* COMO USAR */
-document.getElementById("comoUsar").onclick=()=>{
-  const ajuda=document.getElementById("ajuda");
-  const aberto=ajuda.classList.toggle("open");
-  document.getElementById("comoUsar").textContent=aberto?"📖 Fechar como usar":"📖 Como usar";
-  if(aberto)setTimeout(()=>ajuda.scrollIntoView({behavior:"smooth",block:"start"}),50);
-};
-
-/* ATUALIZAR APLICATIVO */
-document.getElementById("atualizarApp").onclick=async()=>{
-  if(!navigator.onLine)return alert("Sem internet no momento. Conecte-se para buscar a versão nova do aplicativo.");
-  const confirmar=confirm("Atualizar o aplicativo agora?\n\nSe houver uma versão nova publicada, ela será carregada. Seus favoritos, cidades e etapas salvas permanecem no aparelho.");
-  if(!confirmar)return;
+  var STORE = 'medidor-treino-v1';
+  var CONSTS = [2, 4, 5, 10, 20, 40, 60, 80, 120, 200];
+  var state = {meterType:'ponteiro', level:'normal', dials:5, dir:'ltr', constOn:false,
+               ok:0, total:0, streak:0, best:0, timed:false, tSum:0, tCount:0, tBest:0};
   try{
-    const reg=navigator.serviceWorker&&await navigator.serviceWorker.getRegistration();
-    if(reg)await reg.update();
+    var saved = JSON.parse(localStorage.getItem(STORE) || 'null');
+    if(saved && typeof saved === 'object'){
+      ['meterType','level','dials','dir','constOn','ok','total','streak','best','timed','tSum','tCount','tBest'].forEach(function(k){
+        if(saved[k] !== undefined) state[k] = saved[k];
+      });
+      if(!saved.level && saved.mode) state.level = saved.mode === 'pegadinhas' ? 'pegadinhas' : 'normal';
+      state.timed = !!state.timed;
+      state.constOn = !!state.constOn;
+      if(state.dials !== 4 && state.dials !== 5) state.dials = 5;
+      if(['ponteiro','ciclometrico','eletronico'].indexOf(state.meterType) < 0) state.meterType = 'ponteiro';
+      if(['facil','normal','pegadinhas','dificil'].indexOf(state.level) < 0) state.level = 'normal';
+      if(state.dir !== 'ltr' && state.dir !== 'rtl') state.dir = 'ltr';
+    }
   }catch(e){}
-  const url=new URL(window.location.href);
-  url.searchParams.set("app_update",Date.now());
-  window.location.replace(url.toString());
-};
 
-/* TEMA */
-function aplicarTema(){
-  const dark=localStorage.getItem("tema-rota")==="dark";
-  document.body.classList.toggle("dark",dark);
-  document.getElementById("tema").textContent=dark?"☀️":"🌙";
-}
-document.getElementById("tema").onclick=()=>{
-  const dark=document.body.classList.toggle("dark");
-  localStorage.setItem("tema-rota",dark?"dark":"light");
-  document.getElementById("tema").textContent=dark?"☀️":"🌙";
-};
-aplicarTema();
+  var NAMES = ['unidade','dezena','centena','milhar','dezena de milhar'];
+  var q = null, input = '', cinput = '', checked = false;
 
-/* CIDADES */
-function getCidades(){try{return JSON.parse(localStorage.getItem("cidades-rota")||"[]")}catch(e){return[]}}
-function renderCidades(){
-  cidadesSalvasEl.innerHTML="";
-  getCidades().forEach((cidade,index)=>{
-    const wrap=document.createElement("div");
-    wrap.className="chip-wrap";
-    const b=document.createElement("button");
-    b.className="chip";
-    b.textContent="★ "+cidade;
-    b.onclick=()=>cidadeEl.value=cidade;
-    const del=document.createElement("button");
-    del.className="chip-delete";
-    del.type="button";
-    del.title="Excluir cidade salva";
-    del.textContent="🗑️";
-    del.onclick=()=>{
-      if(confirm(`Excluir a cidade salva "${cidade}"?`)){
-        const a=getCidades();
-        a.splice(index,1);
-        localStorage.setItem("cidades-rota",JSON.stringify(a));
-        renderCidades();
+  var $meter = document.getElementById('meter');
+  var $boxes = document.getElementById('boxes');
+  var $keypad = document.getElementById('keypad');
+  var $go = document.getElementById('go');
+  var $result = document.getElementById('result');
+  var $dirHint = document.getElementById('dirHint');
+  var $consRow = document.getElementById('consRow');
+  var $consBox = document.getElementById('consBox');
+
+  function save(){ try{ localStorage.setItem(STORE, JSON.stringify(state)); }catch(e){} }
+  function rnd(n){ return Math.floor(Math.random()*n); }
+  function pow10(k){ return Math.pow(10,k); }
+  function fmt(k){ return pow10(k).toLocaleString('pt-BR'); }
+  function num(n){ return n.toLocaleString('pt-BR'); }
+  function isCW(k){ return k % 2 === 0; }
+  function pad(n){ var s = String(n); while(s.length < state.dials) s = '0' + s; return s; }
+
+  function slotOf(j){ return state.dir === 'rtl' ? state.dials - 1 - j : j; }
+  function digitAt(i){ return input[state.dir === 'rtl' ? state.dials - 1 - i : i]; }
+  function typedReading(){
+    var s = '';
+    for(var i = 0; i < state.dials; i++){ s += (digitAt(i) !== undefined ? digitAt(i) : '_'); }
+    return s;
+  }
+
+  var $clock = document.getElementById('clock');
+  var t0 = 0, clockTimer = null, delayTimer = null, clockStarted = false;
+  var reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  function fmtT(s){ return s.toFixed(1).replace('.', ',') + ' s'; }
+  function stopClock(){
+    if(clockTimer){ clearInterval(clockTimer); clockTimer = null; }
+    if(delayTimer){ clearTimeout(delayTimer); delayTimer = null; }
+    $clock.classList.remove('running');
+  }
+  function startClock(){
+    if(!state.timed) return;
+    clockStarted = true;
+    t0 = performance.now();
+    $clock.textContent = fmtT(0);
+    $clock.classList.add('running');
+    clockTimer = setInterval(function(){ $clock.textContent = fmtT((performance.now() - t0) / 1000); }, 100);
+  }
+
+  /* ---------- geração da leitura por nível ---------- */
+  function build(intN, f){
+    var D = state.dials, N = intN + f, v = [], digits = [];
+    for(var k = 0; k < D; k++){
+      v.push((N / pow10(k)) % 10);
+      digits.push(Math.floor(intN / pow10(k)) % 10);
+    }
+    /* rolos do ciclométrico: o da unidade rola no fim da volta; os outros só rolam quando o de baixo está no 9 */
+    var off = [];
+    for(var j = 0; j < D; j++){
+      if(state.level === 'facil'){ off.push(0); continue; }
+      if(j === 0) off.push(f > 0.6 ? Math.min(0.9, (f - 0.6) / 0.4 * 0.9) : 0);
+      else off.push(digits[j-1] === 9 ? off[j-1] : 0);
+    }
+    return {intN:intN, f:f, v:v, digits:digits, off:off};
+  }
+  function trickyCount(o){
+    var c = 0;
+    for(var k = 1; k < state.dials; k++){ if(isTrickyIn(o, k)) c++; }
+    return c;
+  }
+  function genReading(){
+    var D = state.dials, L = state.level, intN, f, k;
+    if(L === 'facil'){
+      intN = rnd(10) * pow10(D-1);
+      for(k = 0; k < D-1; k++) intN += (2 + rnd(6)) * pow10(k);
+      f = 0.25 + Math.random() * 0.5;
+      return build(intN, f);
+    }
+    if(L === 'pegadinhas'){
+      var t = 1 + rnd(Math.min(3, D-1));
+      intN = rnd(pow10(D - t)) * pow10(t) + (pow10(t) - 1);
+      f = 0.45 + Math.random() * 0.53;
+      return build(intN, f);
+    }
+    if(L === 'dificil'){
+      var best = null, need = Math.min(2, D-1);
+      for(var tries = 0; tries < 60; tries++){
+        intN = rnd(10) * pow10(D-1);
+        for(k = 0; k < D-1; k++){
+          var r = Math.random();
+          intN += (r < 0.4 ? 9 : r < 0.7 ? 0 : rnd(10)) * pow10(k);
+        }
+        f = Math.random() < 0.5 ? 0.88 + Math.random() * 0.1 : 0.02 + Math.random() * 0.1;
+        var o = build(intN, f);
+        if(!best || trickyCount(o) > trickyCount(best)) best = o;
+        if(trickyCount(o) >= need) return o;
       }
-    };
-    wrap.appendChild(b);
-    wrap.appendChild(del);
-    cidadesSalvasEl.appendChild(wrap);
-  });
-}
-document.getElementById("salvarCidade").onclick=()=>{
-  const cidade=cidadeEl.value.trim();
-  if(!cidade)return alert("Digite uma cidade ou região primeiro.");
-  const a=getCidades();if(!a.includes(cidade))a.push(cidade);
-  localStorage.setItem("cidades-rota",JSON.stringify(a));renderCidades();
-};
-renderCidades();
-
-/* ==========================================================
-   GPS
-   Tenta primeiro com alta precisão; se der tempo esgotado ou
-   sinal indisponível, tenta de novo com precisão normal.
-   Retorna {ok:true,lat,lon} ou {ok:false,code}.
-   ========================================================== */
-function pedirPosicao(opcoes){
-  return new Promise(resolve=>{
-    navigator.geolocation.getCurrentPosition(
-      p=>resolve({ok:true,lat:p.coords.latitude,lon:p.coords.longitude,precisao:p.coords.accuracy}),
-      e=>resolve({ok:false,code:e.code}),
-      opcoes
-    );
-  });
-}
-async function obterGPS(){
-  if(!navigator.geolocation)return {ok:false,code:0};
-  let r=await pedirPosicao({enableHighAccuracy:true,timeout:15000,maximumAge:30000});
-  if(!r.ok&&r.code!==1){
-    r=await pedirPosicao({enableHighAccuracy:false,timeout:15000,maximumAge:120000});
-  }
-  return r;
-}
-function mensagemErroGPS(code){
-  if(code===1)return "A permissão de localização está bloqueada para este aplicativo.\n\nNo iPhone: Ajustes > Privacidade e Segurança > Serviços de Localização > Safari (ou Sites do Safari) > \"Ao Usar o App\" e ative \"Localização Precisa\". Depois abra o aplicativo de novo e permita quando ele perguntar.";
-  if(code===2)return "O aparelho não conseguiu determinar a posição agora (sinal fraco ou GPS desligado). Verifique se os Serviços de Localização estão ligados.";
-  if(code===3)return "A localização demorou demais para responder. Tente novamente em local aberto.";
-  return "Este navegador não disponibiliza a localização.";
-}
-
-/* GPS CIDADE */
-document.getElementById("gpsCidade").onclick=async()=>{
-  const g=await obterGPS();
-  if(!g.ok)return alert(mensagemErroGPS(g.code));
-  try{
-    const u=`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${g.lat}&lon=${g.lon}&accept-language=pt-BR`;
-    const r=await fetch(u);const d=await r.json();const a=d.address||{};
-    cidadeEl.value=a.city||a.town||a.municipality||a.village||a.county||"";
-    if(!cidadeEl.value)alert("Não foi possível identificar a cidade.");
-  }catch(e){alert("Não foi possível consultar sua localização.")}
-};
-
-/* RUAS */
-function criarRua(nome="",ni="",nf=""){
-  const div=document.createElement("div");
-  div.className="street";
-  div.innerHTML=`
-    <div class="street-top">
-      <div class="street-number"></div>
-      <input class="street-name" type="text" placeholder="Rua, coordenadas ou nº do medidor" value="${escapeHtml(nome)}">
-      <div class="street-actions">
-        <button class="btn-secondary btn-small salvar-rua">☆</button>
-        <button class="btn-danger btn-small remover-rua">×</button>
-      </div>
-    </div>
-    <div class="street-bottom">
-      <input class="numero-inicial" type="number" inputmode="numeric" placeholder="Nº inicial" value="${escapeHtml(ni)}">
-      <input class="numero-final" type="number" inputmode="numeric" placeholder="Nº final" value="${escapeHtml(nf)}">
-    </div>
-    <div class="street-endereco"></div>`;
-  div.querySelector(".street-name").addEventListener("change",()=>atualizarRotuloRua(div,true));
-  div.querySelector(".remover-rua").onclick=()=>{div.remove();renumerarRuas()};
-  div.querySelector(".salvar-rua").onclick=()=>{
-    const n=div.querySelector(".street-name").value.trim();
-    if(!n)return alert("Digite o nome da rua primeiro.");
-    const c=lerCoord(n);
-    if(c)salvarPonto(c.lat,c.lon);else salvarRua(n);
-  };
-  ruasEl.appendChild(div);renumerarRuas();atualizarRotuloRua(div,false);
-}
-function renumerarRuas(){
-  [...ruasEl.children].forEach((d,i)=>d.querySelector(".street-number").textContent=i+1);
-}
-function lerRuasDaTela(){
-  return [...ruasEl.querySelectorAll(".street")].map(d=>({
-    nome:d.querySelector(".street-name").value.trim(),
-    ni:d.querySelector(".numero-inicial").value.trim(),
-    nf:d.querySelector(".numero-final").value.trim()
-  })).filter(x=>x.nome);
-}
-document.getElementById("adicionarRua").onclick=()=>criarRua();
-
-/* ==========================================================
-   COORDENADAS
-   Endereços encontrados ficam guardados no aparelho, então
-   funcionam depois mesmo sem internet.
-   ========================================================== */
-const RE_COORD=/^\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\s*$/;
-function lerCoord(t){const m=String(t||"").match(RE_COORD);return m?{lat:+m[1],lon:+m[2]}:null}
-function chaveCoord(lat,lon){return `${lat.toFixed(5)},${lon.toFixed(5)}`}
-function getCache(k){try{return JSON.parse(localStorage.getItem(k)||"{}")}catch(e){return{}}}
-function setCache(k,o){try{localStorage.setItem(k,JSON.stringify(o))}catch(e){}}
-function enderecoEmCache(lat,lon){return getCache("enderecos-coord")[chaveCoord(lat,lon)]||null}
-async function enderecoDaCoord(lat,lon){
-  const salvo=enderecoEmCache(lat,lon);
-  if(salvo)return salvo;
-  if(!navigator.onLine)return null;
-  try{
-    const r=await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&zoom=18&accept-language=pt-BR`);
-    if(!r.ok)return null;
-    const d=await r.json();const a=d.address||{};
-    const rua=a.road||a.pedestrian||a.residential||a.neighbourhood||a.suburb||"";
-    if(!rua)return null;
-    const txt=a.house_number?`${rua}, ${a.house_number}`:rua;
-    const cache=getCache("enderecos-coord");cache[chaveCoord(lat,lon)]=txt;setCache("enderecos-coord",cache);
-    return txt;
-  }catch(e){return null}
-}
-async function atualizarRotuloRua(div,buscar){
-  const el=div.querySelector(".street-endereco");if(!el)return;
-  const texto=div.querySelector(".street-name").value;
-  const pm=pontoPorMedidor(texto);
-  if(pm){
-    const e=enderecoEmCache(pm.lat,pm.lon);
-    el.textContent=`🔢 Medidor salvo${e?` — 📌 ${e}`:` — ${pm.lat.toFixed(5)}, ${pm.lon.toFixed(5)}`}${pm.obs?` · 📝 ${pm.obs}`:""}`;
-    return;
-  }
-  const c=lerCoord(texto);
-  if(!c){el.textContent="";return}
-  const pc=pontoPorCoord(c.lat,c.lon);
-  let end=enderecoEmCache(c.lat,c.lon);
-  if(!end&&buscar&&navigator.onLine){el.textContent="🔎 Buscando endereço...";end=await enderecoDaCoord(c.lat,c.lon);}
-  el.textContent=(pc&&pc.medidor?`🔢 ${pc.medidor} — `:"")+(end?`📌 ${end}`:"📌 Coordenada salva — o endereço aparece quando houver internet");
-}
-let resolvendoRotulos=false;
-async function resolverRotulosPendentes(){
-  if(resolvendoRotulos||!navigator.onLine)return;
-  resolvendoRotulos=true;
-  try{
-    for(const div of [...ruasEl.querySelectorAll(".street")]){
-      const c=lerCoord(div.querySelector(".street-name").value);
-      if(c&&!enderecoEmCache(c.lat,c.lon)){await atualizarRotuloRua(div,true);await esperar(1100);}
+      return best;
     }
-  }finally{resolvendoRotulos=false}
-}
-
-document.getElementById("adicionarPosicao").onclick=async()=>{
-  const b=document.getElementById("adicionarPosicao");
-  b.disabled=true;b.textContent="📍 Obtendo sua posição...";
-  const g=await obterGPS();
-  b.disabled=false;b.textContent="📍 Adicionar minha posição aqui";
-  if(!g.ok)return alert(mensagemErroGPS(g.code));
-  const txt=`${g.lat.toFixed(6)}, ${g.lon.toFixed(6)}`;
-  const vazio=[...ruasEl.querySelectorAll(".street-name")].find(i=>!i.value.trim());
-  let div;
-  if(vazio){vazio.value=txt;div=vazio.closest(".street");}
-  else{criarRua(txt);div=ruasEl.lastElementChild;}
-  await atualizarRotuloRua(div,true);
-  if(g.precisao>50){
-    const el=div.querySelector(".street-endereco");
-    el.textContent+=` (precisão de ~${Math.round(g.precisao)} m)`;
+    return build(rnd(pow10(D)), Math.random());
   }
-  div.scrollIntoView({behavior:"smooth",block:"center"});
-};
-criarRua();
 
-/* RUAS SALVAS / FAVORITAS */
-function getRuas(){try{return JSON.parse(localStorage.getItem("ruas-rota")||"[]")}catch(e){return[]}}
-function salvarRua(nome){
-  const a=getRuas();if(!a.includes(nome))a.push(nome);
-  localStorage.setItem("ruas-rota",JSON.stringify(a));renderRuasSalvas();
-}
-function renderRuasSalvas(){
-  ruasSalvasEl.innerHTML="";
-  getRuas().forEach((nome,index)=>{
-    const wrap=document.createElement("div");
-    wrap.className="chip-wrap";
-    const b=document.createElement("button");
-    b.className="chip";
-    const cf=lerCoord(nome);
-    b.textContent="★ "+(cf?(enderecoEmCache(cf.lat,cf.lon)?`📍 ${enderecoEmCache(cf.lat,cf.lon)}`:`📍 ${nome}`):nome);
-    b.title="Adicionar esta rua à rota";
-    b.onclick=()=>criarRua(nome);
-    const del=document.createElement("button");
-    del.className="chip-delete";
-    del.type="button";
-    del.title="Excluir rua favorita";
-    del.textContent="🗑️";
-    del.onclick=()=>{
-      if(confirm(`Excluir a rua favorita "${nome}"?`)){
-        const a=getRuas();
-        a.splice(index,1);
-        localStorage.setItem("ruas-rota",JSON.stringify(a));
-        renderRuasSalvas();
+  function newQuestion(){
+    var prev = q ? q.intN : -1, o;
+    do{ o = genReading(); }while(o.intN === prev);
+    if(state.constOn){
+      var D = state.dials, M = pow10(D);
+      o.K = CONSTS[rnd(CONSTS.length)];
+      var maxDelta = D === 5 ? 600 : 300;
+      var delta = 5 + rnd(maxDelta);
+      var wantTurn = (state.level === 'dificil' && Math.random() < 0.4) || (state.level === 'pegadinhas' && Math.random() < 0.15);
+      if(wantTurn){
+        /* força a virada mantendo as pegadinhas dos dígitos de baixo */
+        var low = o.intN % pow10(D-2);
+        o = Object.assign(build(low, o.f), {K:o.K});
+        delta = low + 1 + rnd(400);
       }
-    };
-    wrap.appendChild(b);
-    wrap.appendChild(del);
-    ruasSalvasEl.appendChild(wrap);
-  });
-}
-renderRuasSalvas();
-
-/* BAIRRO */
-document.getElementById("bairroInteiro").onclick=async()=>{
-  const cidade=cidadeEl.value.trim();if(!cidade)return alert("Digite a cidade/região primeiro.");
-  const bairro=prompt("Digite o nome do bairro:");if(!bairro)return;
-  const botao=document.getElementById("bairroInteiro");botao.disabled=true;botao.textContent="🔎 Procurando ruas...";
-  try{
-    const gr=await fetch(`https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=br&q=${encodeURIComponent(bairro+", "+cidade+", Brasil")}`);
-    const gd=await gr.json();if(!gd.length)return alert("Bairro não encontrado.");
-    const lat=+gd[0].lat,lon=+gd[0].lon,delta=.02;
-    const q=`[out:json][timeout:25];way["highway"](${lat-delta},${lon-delta},${lat+delta},${lon+delta});out tags center;`;
-    const or=await fetch("https://overpass-api.de/api/interpreter",{method:"POST",body:q});
-    const od=await or.json();
-    const ignorar=new Set(["footway","path","steps","cycleway","track","service","motorway","motorway_link","trunk","trunk_link","pedestrian","construction","proposed"]);
-    const nomes=new Map();
-    (od.elements||[]).forEach(e=>{const t=e.tags||{};if(t.name&&!ignorar.has(t.highway)&&!nomes.has(t.name))nomes.set(t.name,t.name)});
-    if(!nomes.size)return alert("Nenhuma rua encontrada nesse bairro.");
-    ruasEl.innerHTML="";[...nomes.values()].sort((a,b)=>a.localeCompare(b,"pt-BR")).forEach(n=>criarRua(n));
-    alert(`${nomes.size} ruas encontradas.`);
-  }catch(e){alert("Não foi possível buscar as ruas do bairro.");}
-  finally{botao.disabled=false;botao.textContent="📍 Preencher ruas de um bairro inteiro";}
-};
-
-/* ETAPAS (agora guardam também Nº inicial e Nº final) */
-function getEtapas(){try{return JSON.parse(localStorage.getItem("etapas-rota")||"[]")}catch(e){return[]}}
-function renderEtapas(){
-  etapasSalvasEl.innerHTML="";
-  getEtapas().forEach((etapa,index)=>{
-    const wrap=document.createElement("div");
-    wrap.className="chip-wrap";
-    const b=document.createElement("button");
-    b.className="chip";
-    b.textContent="📁 "+etapa.nome;
-    b.onclick=()=>{
-      cidadeEl.value=etapa.cidade||"";
-      ruasEl.innerHTML="";
-      (etapa.ruas||[]).forEach(r=>typeof r==="string"?criarRua(r):criarRua(r.nome,r.ni||"",r.nf||""));
-      if(!ruasEl.children.length)criarRua();
-    };
-    const del=document.createElement("button");
-    del.className="chip-delete";
-    del.type="button";
-    del.title="Excluir etapa salva";
-    del.textContent="🗑️";
-    del.onclick=()=>{
-      if(confirm(`Excluir a etapa "${etapa.nome}"?`)){
-        const a=getEtapas();
-        a.splice(index,1);
-        localStorage.setItem("etapas-rota",JSON.stringify(a));
-        renderEtapas();
-      }
-    };
-    wrap.appendChild(b);
-    wrap.appendChild(del);
-    etapasSalvasEl.appendChild(wrap);
-  });
-}
-document.getElementById("salvarEtapa").onclick=()=>{
-  const ruas=lerRuasDaTela();
-  if(!ruas.length)return alert("Adicione pelo menos uma rua.");
-  const nome=prompt("Digite um nome para esta etapa:");if(!nome)return;
-  const a=getEtapas();a.push({nome,cidade:cidadeEl.value.trim(),ruas});
-  localStorage.setItem("etapas-rota",JSON.stringify(a));renderEtapas();alert("Etapa salva.");
-};
-renderEtapas();
-
-/* ==========================================================
-   GEOCODIFICAÇÃO
-   Com número: busca estruturada (rua + número + cidade).
-   Se não achar, busca só pelo nome da rua na cidade.
-   ========================================================== */
-const esperar=ms=>new Promise(r=>setTimeout(r,ms));
-async function nominatim(params){
-  const u=new URL("https://nominatim.openstreetmap.org/search");
-  const p={format:"jsonv2",limit:"1",countrycodes:"br","accept-language":"pt-BR"};
-  Object.entries(params).forEach(([k,v])=>{if(v)p[k]=v});
-  u.search=new URLSearchParams(p).toString();
-  const r=await fetch(u);
-  if(!r.ok)return null;
-  const d=await r.json();
-  return d.length?{lat:+d[0].lat,lon:+d[0].lon}:null;
-}
-function rotuloRua(nome,ni,nf){
-  if(ni&&nf)return `${nome} (nº ${ni} a ${nf})`;
-  if(ni)return `${nome}, ${ni}`;
-  return nome;
-}
-async function geocodificarRua(nome,cidade,ni,nf){
-  const pm=pontoPorMedidor(nome);
-  const c=pm?{lat:pm.lat,lon:pm.lon}:lerCoord(nome);
-  if(c){
-    const end=enderecoEmCache(c.lat,c.lon);
-    return {nome:nomeDoPonto(c.lat,c.lon),lat:c.lat,lon:c.lon,coord:true,pendente:!end,rede:false};
-  }
-  const chave=`${nome}|${ni}|${cidade}`.toLowerCase();
-  const cacheRuas=getCache("geo-ruas");
-  if(cacheRuas[chave])return {nome:rotuloRua(nome,ni,nf),lat:cacheRuas[chave][0],lon:cacheRuas[chave][1],rede:false};
-  if(!navigator.onLine)return null;
-  let p=null;
-  if(ni){
-    p=await nominatim({street:`${ni} ${nome}`,city:cidade,country:"Brasil"});
-    if(!p)await esperar(1100);
-  }
-  if(!p){
-    let q=nome.trim();
-    if(cidade)q+=`, ${cidade}`;
-    q+=", Brasil";
-    p=await nominatim({q});
-  }
-  if(!p)return {falhou:true,rede:true};
-  const cr=getCache("geo-ruas");cr[chave]=[p.lat,p.lon];setCache("geo-ruas",cr);
-  return {nome:rotuloRua(nome,ni,nf),lat:p.lat,lon:p.lon,rede:true};
-}
-function haversine(a,b){
-  const R=6371,la1=a.lat*Math.PI/180,la2=b.lat*Math.PI/180,dla=(b.lat-a.lat)*Math.PI/180,dlo=(b.lon-a.lon)*Math.PI/180;
-  const x=Math.sin(dla/2)**2+Math.cos(la1)*Math.cos(la2)*Math.sin(dlo/2)**2;
-  return 2*R*Math.asin(Math.sqrt(x));
-}
-function nearestNeighborOrder(points,start){
-  const r=points.slice(),out=[];let atual=start;
-  while(r.length){
-    let bi=0,bd=Infinity;
-    r.forEach((p,i)=>{const d=haversine(atual,p);if(d<bd){bd=d;bi=i}});
-    const p=r.splice(bi,1)[0];out.push(p);atual=p;
-  }
-  return out;
-}
-
-/* ==========================================================
-   CALCULAR
-   O GPS é pedido logo no toque do botão (junto com a busca
-   das ruas). Se falhar, o app AVISA e pergunta antes de usar
-   a primeira rua como ponto de partida.
-   ========================================================== */
-document.getElementById("calcular").onclick=async()=>{
-  const entradas=lerRuasDaTela();
-  const cidade=cidadeEl.value.trim();
-  if(!entradas.length)return alert("Adicione pelo menos uma rua.");
-  const querGps=usarGpsEl.checked;
-  const gpsPromise=querGps?obterGPS():Promise.resolve(null);
-  const botao=document.getElementById("calcular");botao.disabled=true;
-  try{
-    const pontos=[],naoEncontradas=[];
-    for(let i=0;i<entradas.length;i++){
-      botao.textContent=`🔎 Localizando ${i+1}/${entradas.length}...`;
-      let p=null;
-      try{p=await geocodificarRua(entradas[i].nome,cidade,entradas[i].ni,entradas[i].nf)}catch(e){p={falhou:true,rede:true}}
-      if(p&&!p.falhou)pontos.push(p);else naoEncontradas.push(entradas[i].nome);
-      if(p&&p.rede&&i<entradas.length-1)await esperar(1100);
+      o.prev = ((o.intN - delta) % M + M) % M;
+      o.turned = o.prev > o.intN;
+      o.diff = o.turned ? o.intN + M - o.prev : o.intN - o.prev;
+      o.cons = o.diff * o.K;
     }
-    if(!pontos.length)return alert(navigator.onLine?"Nenhuma rua pôde ser localizada. Confira os nomes e a cidade.":"Sem internet: só é possível usar coordenadas, sua posição ou ruas que já foram buscadas antes.");
+    q = o;
+    input = '';
+    cinput = '';
+    checked = false;
+  }
 
-    let inicio=null,avisoTexto="";
-    if(querGps){
-      botao.textContent="📍 Obtendo localização...";
-      const g=await gpsPromise;
-      if(g&&g.ok){
-        inicio=g;
-        if(g.precisao>200)avisoTexto=`Localização aproximada (precisão de ~${Math.round(g.precisao)} m). Se o ponto de partida parecer errado, ative "Localização Precisa" nos Ajustes.`;
-      }else{
-        const seguir=confirm(`⚠️ Não foi possível usar sua localização atual.\n\n${mensagemErroGPS(g?g.code:0)}\n\nDeseja calcular mesmo assim, começando pela primeira rua da lista?`);
-        if(!seguir)return;
-        avisoTexto="Sua localização não foi obtida. A rota começou pela primeira rua da lista.";
-      }
-    }
-
-    if(inicio){
-      currentStops=[
-        {nome:"📍 Minha localização atual",lat:inicio.lat,lon:inicio.lon,isStart:true},
-        ...nearestNeighborOrder(pontos,inicio)
-      ];
-    }else{
-      const primeiro=pontos.shift();
-      currentStops=[primeiro,...nearestNeighborOrder(pontos,primeiro)];
-    }
-
-    if(naoEncontradas.length){
-      avisoTexto+=(avisoTexto?"<br>":"")+(navigator.onLine
-        ?`Não encontradas: <b>${naoEncontradas.map(escapeHtml).join(", ")}</b>.`
-        :`Sem internet — ficaram de fora: <b>${naoEncontradas.map(escapeHtml).join(", ")}</b>. Calcule de novo quando o sinal voltar.`);
-    }
-    avisoGpsEl.innerHTML=avisoTexto;
-    avisoGpsEl.style.display=avisoTexto?"block":"none";
-
-    renderStops();resultadoEl.style.display="block";timestampEl.textContent=`Calculada em ${new Date().toLocaleString("pt-BR")}`;salvarUltimaRota();
-    setTimeout(()=>renderMap(currentStops),250);
-    setTimeout(atualizarNomesPendentes,1500);
-    resultadoEl.scrollIntoView({behavior:"smooth",block:"start"});
-  }catch(e){alert("Ocorreu um erro ao calcular a rota.");}
-  finally{botao.disabled=false;botao.textContent="🚗 Calcular melhor rota";}
-};
-
-/* LISTA DE PARADAS (ponto de GPS fica travado no topo) */
-function renderStops(){
-  stopsListEl.innerHTML="";
-  const inicioFixo=!!currentStops[0]?.isStart;
-  currentStops.forEach((stop,index)=>{
-    const upOff=index===0||(inicioFixo&&index===1);
-    const downOff=index===currentStops.length-1||(inicioFixo&&index===0);
-    const badge=index===0?(stop.isStart?"📍 Ponto de partida (GPS)":"Ponto inicial (1ª rua)"):"";
-    const div=document.createElement("div");div.className="stop";
-    div.innerHTML=`
-      <div class="stop-number${stop.isStart?" start":""}">${index+1}</div>
-      <div class="stop-info">
-        <div class="stop-name">${escapeHtml(stop.nome)}</div>
-        <div class="stop-coords">${stop.lat.toFixed(6)}, ${stop.lon.toFixed(6)}</div>
-        ${badge?`<span class="start-badge">${badge}</span>`:""}
-        <div class="stop-edit">
-          <button class="btn-secondary editar">✏️ Editar</button>
-          <button class="btn-danger remover">🗑️ Remover</button>
-        </div>
-      </div>
-      <div class="stop-controls">
-        <button class="move up" ${upOff?"disabled":""}>▲</button>
-        <button class="move down" ${downOff?"disabled":""}>▼</button>
-      </div>`;
-    div.querySelector(".up").onclick=()=>{
-      if(upOff)return;
-      [currentStops[index-1],currentStops[index]]=[currentStops[index],currentStops[index-1]];
-      renderStops();salvarUltimaRota();renderMap(currentStops);
-    };
-    div.querySelector(".down").onclick=()=>{
-      if(downOff)return;
-      [currentStops[index],currentStops[index+1]]=[currentStops[index+1],currentStops[index]];
-      renderStops();salvarUltimaRota();renderMap(currentStops);
-    };
-    div.querySelector(".editar").onclick=()=>editarParada(index);
-    div.querySelector(".remover").onclick=()=>{
-      if(!confirm(`Remover "${stop.nome}" da rota?`))return;
-      currentStops.splice(index,1);
-      if(!currentStops.length)return limparRota(true);
-      renderStops();salvarUltimaRota();renderMap(currentStops);
-    };
-    stopsListEl.appendChild(div);
-  });
-}
-
-/* EDITAR / REMOVER / LIMPAR */
-async function editarParada(index){
-  const stop=currentStops[index];
-  if(stop.isStart){
-    const atualizar=confirm("Atualizar o ponto de partida para onde você está agora?\n\nOK = pegar a posição de novo pelo GPS\nCancelar = digitar as coordenadas");
-    if(atualizar){
-      const g=await obterGPS();
-      if(!g.ok)return alert(mensagemErroGPS(g.code));
-      stop.lat=g.lat;stop.lon=g.lon;
-      renderStops();salvarUltimaRota();renderMap(currentStops);
+  /* ---------- desenho do medidor ---------- */
+  function plateHtml(){
+    return '<div class="plate" id="plate" hidden><span>Constante de multiplicação <b id="plK"></b></span><span>Leitura anterior <b id="plPrev"></b></span></div>';
+  }
+  function buildMeter(){
+    var D = state.dials;
+    if(state.meterType === 'eletronico'){
+      $meter.innerHTML =
+        '<div class="model-card"><div class="digital-meter">' +
+          '<div class="digital-label">Medidor eletrônico</div>' +
+          '<div class="digital-value" id="digitalValue">00000</div>' +
+          '<div class="model-caption">Display digital de consumo</div>' +
+        '</div></div>' + plateHtml();
       return;
     }
+    if(state.meterType === 'ciclometrico'){
+      var c = '<div class="model-card"><div><div class="cyclo-meter" aria-label="Medidor ciclométrico">';
+      for(var w = 0; w < D; w++){
+        c += '<div class="cyclo-wheel" data-wheel="'+w+'"><div class="cyclo-strip"><span>0</span><span>1</span></div></div>';
+      }
+      c += '</div><div class="model-caption">Medidor ciclométrico</div></div></div>' + plateHtml();
+      $meter.innerHTML = c;
+      return;
+    }
+    var W = D*100 + 20, H = 166, s = '';
+    s += '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Medidor com '+D+' mostradores de ponteiro">';
+    s += '<rect class="housing" x="2" y="2" width="'+(W-4)+'" height="'+(H-4)+'" rx="16"/>';
+    for(var i = 0; i < D; i++){
+      var k = D-1-i, cx = 60 + i*100, cy = 86, cw = isCW(k), sign = cw ? 1 : -1;
+      s += '<g transform="translate('+cx+','+cy+')" data-i="'+i+'" data-k="'+k+'">';
+      s += '<text class="lab" y="-62">×'+fmt(k)+' '+(cw ? '↻' : '↺')+'</text>';
+      s += '<circle class="ring" r="49"/><circle class="face" r="46"/>';
+      for(var j = 0; j < 20; j++){
+        var a = j*18*Math.PI/180, major = (j % 2 === 0), r1 = 43, r2 = major ? 37 : 40;
+        s += '<line class="tick'+(major?'':' minor')+'" x1="'+(r1*Math.sin(a)).toFixed(2)+'" y1="'+(-r1*Math.cos(a)).toFixed(2)+'" x2="'+(r2*Math.sin(a)).toFixed(2)+'" y2="'+(-r2*Math.cos(a)).toFixed(2)+'"/>';
+      }
+      for(var n = 0; n < 10; n++){
+        var th = sign*n*36*Math.PI/180;
+        s += '<text class="num" x="'+(30*Math.sin(th)).toFixed(2)+'" y="'+(-30*Math.cos(th)).toFixed(2)+'">'+n+'</text>';
+      }
+      s += '<g class="needle" style="transform:rotate(0deg)">';
+      s += '<path class="body" d="M0,-39 L3.2,0 L0,9 L-3.2,0 Z"/><path class="tip" d="M0,-39 L1.7,-25 L-1.7,-25 Z"/>';
+      s += '</g><circle class="hub" r="4.8"/><circle class="hub-dot" r="1.6"/>';
+      s += '<text class="ans" y="68"></text></g>';
+    }
+    s += '</svg>';
+    $meter.innerHTML = s + plateHtml();
   }
-  const nomeAtual=stop.nome;
-  const nome=prompt("Nome do local:",nomeAtual);
-  if(nome===null)return;
-  const coordAtual=`${stop.lat.toFixed(6)}, ${stop.lon.toFixed(6)}`;
-  const coordTxt=prompt("Coordenadas (latitude, longitude):\nDeixe como está se não quiser mudar.",coordAtual);
-  if(coordTxt===null)return;
-  const c=lerCoord(coordTxt);
-  if(!c)return alert("Coordenadas inválidas. Use o formato: -23.3435, -47.8421");
-  if(Math.abs(c.lat)>90||Math.abs(c.lon)>180)return alert("Coordenadas fora do mapa. Confira os números.");
-  stop.nome=nome.trim()||nomeAtual;
-  if(coordTxt.trim()!==coordAtual){stop.lat=c.lat;stop.lon=c.lon;stop.pendente=false;}
-  renderStops();salvarUltimaRota();renderMap(currentStops);
-}
-function limparRota(semPerguntar){
-  if(!semPerguntar&&!confirm("Apagar a ordem sugerida e o mapa da rota?\n\nSuas ruas da lista, favoritos, medidores e etapas continuam salvos."))return;
-  currentStops=[];
-  localStorage.removeItem("ultima-rota");
-  stopsListEl.innerHTML="";
-  avisoGpsEl.style.display="none";
-  resultadoEl.style.display="none";
-  rotaReqId++;
-  if(map)limparMapa();
-  mapStatusEl.textContent=map?"Mapa pronto":mapStatusEl.textContent;
-}
-document.getElementById("limparRota").onclick=()=>limparRota(false);
 
-/* MAPBOX */
-const MAPBOX_JS="https://api.mapbox.com/mapbox-gl-js/v3.30.0/mapbox-gl.js";
-const MAPBOX_CSS="https://api.mapbox.com/mapbox-gl-js/v3.30.0/mapbox-gl.css";
-function carregarMapbox(){
-  return new Promise(res=>{
-    if(window.mapboxgl)return res(true);
-    const l=document.createElement("link");l.rel="stylesheet";l.href=MAPBOX_CSS;document.head.appendChild(l);
-    const s=document.createElement("script");s.src=MAPBOX_JS;s.onload=()=>res(!!window.mapboxgl);s.onerror=()=>{s.remove();res(false)};
-    document.head.appendChild(s);
-  });
-}
-async function iniciarMapa(){
-  if(map)return;
-  if(!MAPBOX_TOKEN.startsWith("pk.")){
-    mapStatusEl.textContent="Token ainda não configurado";
-    return;
+  function applyPlate(){
+    var p = document.getElementById('plate');
+    if(!p) return;
+    p.hidden = !state.constOn;
+    if(state.constOn && q){
+      document.getElementById('plK').textContent = '× ' + q.K;
+      document.getElementById('plPrev').textContent = pad(q.prev);
+    }
   }
-  if(!window.mapboxgl){
-    const ok=await carregarMapbox();
-    if(!ok){mapStatusEl.textContent="📴 O mapa aparece quando houver internet";return;}
-  }
-  try{
-    mapboxgl.accessToken=MAPBOX_TOKEN;
-    map=new mapboxgl.Map({container:"map",style:"mapbox://styles/mapbox/streets-v12",center:[-47.8567,-23.355],zoom:10});
-    map.addControl(new mapboxgl.NavigationControl(),"top-right");
-    map.on("error",()=>{if(!navigator.onLine)mapStatusEl.textContent="📴 Sem internet — mapa parcial";});
-    map.on("load",()=>{
-      mapStatusEl.textContent="Mapa pronto";
-      if(currentStops.length)renderMap(currentStops);
+
+  function applyNeedles(){
+    applyPlate();
+    if(state.meterType === 'eletronico'){
+      var el = document.getElementById('digitalValue');
+      if(el && q) el.textContent = pad(q.intN);
+      return;
+    }
+    if(state.meterType === 'ciclometrico'){
+      Array.prototype.forEach.call($meter.querySelectorAll('.cyclo-wheel'), function(w, i){
+        var k = state.dials - 1 - i, d = q.digits[k], spans = w.querySelectorAll('span');
+        spans[0].textContent = d;
+        spans[1].textContent = (d + 1) % 10;
+        w.className = 'cyclo-wheel';
+        w.querySelector('.cyclo-strip').style.transform = 'translateY(-' + (q.off[k] * 50).toFixed(1) + '%)';
+      });
+      return;
+    }
+    Array.prototype.forEach.call($meter.querySelectorAll('g[data-k]'), function(g){
+      var k = +g.getAttribute('data-k');
+      var deg = (isCW(k) ? 1 : -1) * q.v[k] * 36;
+      g.querySelector('.needle').style.transform = 'rotate('+deg.toFixed(2)+'deg)';
     });
-  }catch(e){mapStatusEl.textContent="Erro ao carregar o mapa";}
-}
-function limparMapa(){
-  markers.forEach(m=>m.remove());markers=[];
-  if(map&&map.getSource("rota-sequencia")){
-    if(map.getLayer("rota-linha"))map.removeLayer("rota-linha");
-    map.removeSource("rota-sequencia");
   }
-}
-/* TRAJETO REAL PELAS RUAS (Mapbox Directions)
-   Divide em blocos de até 25 pontos (limite do Mapbox).
-   Se falhar, o mapa mantém a linha reta. */
-let rotaReqId=0;
-async function buscarTrajeto(coords){
-  let linha=[],dist=0,dur=0;
-  for(let i=0;i<coords.length-1;i+=24){
-    const parte=coords.slice(i,i+25);
-    if(parte.length<2)continue;
-    const s=parte.map(c=>`${c[0].toFixed(6)},${c[1].toFixed(6)}`).join(";");
-    const url=`https://api.mapbox.com/directions/v5/mapbox/driving/${s}?geometries=geojson&overview=full&access_token=${MAPBOX_TOKEN}`;
-    const r=await fetch(url);
-    if(!r.ok)throw new Error("directions "+r.status);
-    const d=await r.json();
-    if(!d.routes||!d.routes.length)throw new Error("sem rota");
-    const g=d.routes[0].geometry.coordinates;
-    linha=linha.concat(linha.length?g.slice(1):g);
-    dist+=d.routes[0].distance;dur+=d.routes[0].duration;
-  }
-  return {linha,dist,dur};
-}
-function formatarDist(m){return m>=1000?`${(m/1000).toFixed(1).replace(".",",")} km`:`${Math.round(m)} m`}
-function formatarTempo(s){const min=Math.max(1,Math.round(s/60));return min>=60?`${Math.floor(min/60)}h${String(min%60).padStart(2,"0")}`:`${min} min`}
 
-function renderMap(stops){
-  if(!map||!map.loaded()||!stops||!stops.length)return;
-  limparMapa();
-  const reqId=++rotaReqId;
-  const bounds=new mapboxgl.LngLatBounds();
-  const coords=stops.map(s=>[s.lon,s.lat]);
-  coords.forEach((c,i)=>{
-    const el=document.createElement("div");el.className="map-marker"+(i===0?" start":"");el.textContent=i+1;
-    const popup=new mapboxgl.Popup({offset:20}).setHTML(`<strong>${i+1}. ${escapeHtml(stops[i].nome)}</strong><br>${stops[i].lat.toFixed(6)}, ${stops[i].lon.toFixed(6)}`);
-    markers.push(new mapboxgl.Marker({element:el}).setLngLat(c).setPopup(popup).addTo(map));
-    bounds.extend(c);
-  });
-  if(coords.length===1){
-    map.flyTo({center:coords[0],zoom:15,duration:700});
-    mapStatusEl.textContent="1 ponto no mapa";
-    return;
-  }
-  // Linha reta provisória enquanto o trajeto é calculado
-  map.addSource("rota-sequencia",{type:"geojson",data:{type:"Feature",geometry:{type:"LineString",coordinates:coords}}});
-  map.addLayer({id:"rota-linha",type:"line",source:"rota-sequencia",layout:{"line-join":"round","line-cap":"round"},paint:{"line-color":"#4a4f57","line-width":5,"line-opacity":.85}});
-  map.fitBounds(bounds,{padding:45,maxZoom:15,duration:700});
-  if(!navigator.onLine){mapStatusEl.textContent=`${stops.length} pontos · 📴 trajeto quando voltar o sinal`;return;}
-  mapStatusEl.textContent="🔎 Traçando trajeto pelas ruas...";
-
-  buscarTrajeto(coords).then(t=>{
-    if(reqId!==rotaReqId)return; // a ordem mudou enquanto calculava
-    const src=map.getSource("rota-sequencia");
-    if(!src)return;
-    src.setData({type:"Feature",geometry:{type:"LineString",coordinates:t.linha}});
-    const b=new mapboxgl.LngLatBounds();
-    t.linha.forEach(c=>b.extend(c));coords.forEach(c=>b.extend(c));
-    map.fitBounds(b,{padding:45,maxZoom:16,duration:700});
-    mapStatusEl.textContent=`🚗 ${formatarDist(t.dist)} · ~${formatarTempo(t.dur)}`;
-  }).catch(()=>{
-    if(reqId!==rotaReqId)return;
-    mapStatusEl.textContent=`${stops.length} pontos · trajeto indisponível (linha reta)`;
-  });
-}
-
-/* ÚLTIMA ROTA */
-function salvarUltimaRota(){
-  localStorage.setItem("ultima-rota",JSON.stringify({data:dataRotaEl.value,cidade:cidadeEl.value,stops:currentStops,timestamp:new Date().toISOString()}));
-}
-function carregarUltimaRota(){
-  try{
-    const d=JSON.parse(localStorage.getItem("ultima-rota"));
-    if(!d||!d.stops?.length)return;
-    dataRotaEl.value=d.data||hojeISO();cidadeEl.value=d.cidade||"";currentStops=d.stops;
-    renderStops();resultadoEl.style.display="block";
-    timestampEl.textContent=d.timestamp?`Última rota: ${new Date(d.timestamp).toLocaleString("pt-BR")}`:"";
-  }catch(e){}
-}
-
-/* GOOGLE MAPS */
-function montarUrlGoogle(){
-  const origin=`${currentStops[0].lat},${currentStops[0].lon}`;
-  const last=currentStops[currentStops.length-1];
-  const destination=`${last.lat},${last.lon}`;
-  const waypoints=currentStops.slice(1,-1).map(s=>`${s.lat},${s.lon}`).join("|");
-  let url=`https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}`;
-  if(waypoints)url+=`&waypoints=${encodeURIComponent(waypoints)}`;
-  return url+"&travelmode=driving";
-}
-document.getElementById("abrirGoogle").onclick=()=>{
-  if(!currentStops.length)return alert("Calcule uma rota primeiro.");
-  if(currentStops.length<2)return alert("A rota precisa de pelo menos 2 pontos. Deixe a localização atual marcada ou adicione mais ruas.");
-  window.open(montarUrlGoogle(),"_blank");
-};
-
-/* COMPARTILHAR */
-document.getElementById("compartilhar").onclick=async()=>{
-  if(!currentStops.length)return alert("Calcule uma rota primeiro.");
-  const googleUrl=montarUrlGoogle();
-  const texto=`🚗 Rota do Dia — Faturamento\n\n📅 Data: ${dataRotaEl.value}\n📍 Cidade/região: ${cidadeEl.value||"Não informada"}\n\n${currentStops.map((s,i)=>`${i+1}. ${s.nome}`).join("\n")}\n\n🗺️ Abrir rota no Google Maps:\n${googleUrl}`;
-  if(navigator.share){try{await navigator.share({title:"Rota do Dia — Faturamento",text:texto});return}catch(e){if(e.name==="AbortError")return}}
-  window.open("https://wa.me/?text="+encodeURIComponent(texto),"_blank");
-};
-
-/* COMPARTILHAR APLICATIVO */
-document.getElementById("compartilharApp").onclick=async()=>{
-  const u=new URL(window.location.href);u.searchParams.delete("app_update");
-  const appUrl=u.toString();
-  const texto="📍 Rota do Dia — Faturamento\n\nCompartilhe este aplicativo para acessar o Rota do Dia.";
-  if(navigator.share){
-    try{await navigator.share({title:"Rota do Dia — Faturamento",text:texto,url:appUrl});return;}
-    catch(e){if(e.name==="AbortError")return}
-  }
-  window.open("https://wa.me/?text="+encodeURIComponent(texto+"\n"+appUrl),"_blank");
-};
-
-/* ==========================================================
-   MEDIDORES E PONTOS SALVOS
-   ========================================================== */
-const pontosListaEl=document.getElementById("pontosLista");
-const buscaMedidorEl=document.getElementById("buscaMedidor");
-function getPontos(){try{return JSON.parse(localStorage.getItem("pontos-rota")||"[]")}catch(e){return[]}}
-function setPontos(a){localStorage.setItem("pontos-rota",JSON.stringify(a))}
-function normMedidor(t){return String(t||"").toUpperCase().replace(/[^0-9A-Z]/g,"")}
-function pontoPorMedidor(t){const n=normMedidor(t);if(!n||lerCoord(t))return null;return getPontos().find(p=>normMedidor(p.medidor)===n)||null}
-function pontoPorCoord(lat,lon){const k=chaveCoord(lat,lon);return getPontos().find(p=>chaveCoord(p.lat,p.lon)===k)||null}
-function nomeDoPonto(lat,lon){
-  const p=pontoPorCoord(lat,lon),end=enderecoEmCache(lat,lon);
-  const local=end?end:`${lat.toFixed(5)}, ${lon.toFixed(5)}`;
-  return p&&p.medidor?`🔢 ${p.medidor} — ${local}`:`📍 ${end?end:"Ponto "+local}`;
-}
-function salvarPonto(lat,lon){
-  const medidor=prompt("Nº do medidor / equipamento (pode deixar em branco):","");
-  if(medidor===null)return false;
-  const obs=prompt("Observação (opcional) — ex.: casa dos fundos, portão azul:","");
-  if(obs===null)return false;
-  const a=getPontos();
-  const n=normMedidor(medidor);
-  if(n){
-    const dup=a.find(p=>normMedidor(p.medidor)===n);
-    if(dup){
-      if(!confirm(`O medidor ${dup.medidor} já está salvo. Trocar pela posição nova?`))return false;
-      a.splice(a.indexOf(dup),1);
-    }
-  }
-  a.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),medidor:medidor.trim(),lat,lon,obs:obs.trim(),criadoEm:new Date().toISOString()});
-  setPontos(a);
-  buscaMedidorEl.value=medidor.trim();
-  renderPontos(buscaMedidorEl.value);
-  enderecoDaCoord(lat,lon).then(()=>{renderPontos(buscaMedidorEl.value);[...ruasEl.querySelectorAll(".street")].forEach(d=>atualizarRotuloRua(d,false));});
-  [...ruasEl.querySelectorAll(".street")].forEach(d=>atualizarRotuloRua(d,false));
-  return true;
-}
-function adicionarCoordNaLista(lat,lon){
-  const txt=`${lat.toFixed(6)}, ${lon.toFixed(6)}`;
-  const vazio=[...ruasEl.querySelectorAll(".street-name")].find(i=>!i.value.trim());
-  let div;
-  if(vazio){vazio.value=txt;div=vazio.closest(".street");}
-  else{criarRua(txt);div=ruasEl.lastElementChild;}
-  atualizarRotuloRua(div,true);
-  return div;
-}
-function renderPontos(filtro=""){
-  const n=normMedidor(filtro);
-  const todos=getPontos().slice().reverse();
-  let lista=n?todos.filter(p=>normMedidor(p.medidor).includes(n)):todos;
-  pontosListaEl.innerHTML="";
-  if(!todos.length){pontosListaEl.innerHTML='<div class="hint">Nenhum ponto salvo ainda.</div>';return}
-  if(n&&!lista.length){
-    pontosListaEl.innerHTML=`<div class="hint">Nenhum ponto salvo com o medidor <b>${escapeHtml(filtro)}</b>. Quando estiver no local, use <b>📍 Salvar minha posição com nº do medidor</b>.</div>`;
-    return;
-  }
-  const limite=n?30:5;
-  lista.slice(0,limite).forEach(p=>{
-    const end=enderecoEmCache(p.lat,p.lon);
-    const div=document.createElement("div");div.className="ponto";
-    div.innerHTML=`
-      <div class="ponto-info">
-        <div class="ponto-titulo">🔢 ${p.medidor?escapeHtml(p.medidor):"Sem nº de medidor"}</div>
-        <div class="ponto-linha">📌 ${end?escapeHtml(end):"Endereço aparece quando houver internet"}</div>
-        ${p.obs?`<div class="ponto-linha">📝 ${escapeHtml(p.obs)}</div>`:""}
-        <div class="stop-coords">${p.lat.toFixed(6)}, ${p.lon.toFixed(6)}</div>
-      </div>
-      <div class="ponto-acoes">
-        <button class="btn-primary add">➕ Rota</button>
-        <button class="btn-secondary ver">🗺️ Ver</button>
-        <button class="btn-danger del">🗑️</button>
-      </div>`;
-    div.querySelector(".add").onclick=()=>{
-      const d=adicionarCoordNaLista(p.lat,p.lon);
-      d.scrollIntoView({behavior:"smooth",block:"center"});
-    };
-    div.querySelector(".ver").onclick=()=>mostrarPontosNoMapa([p]);
-    div.querySelector(".del").onclick=()=>{
-      if(!confirm(`Excluir o ponto ${p.medidor?"do medidor "+p.medidor:"salvo"}?`))return;
-      setPontos(getPontos().filter(x=>x.id!==p.id));
-      renderPontos(buscaMedidorEl.value);
-    };
-    pontosListaEl.appendChild(div);
-  });
-  if(lista.length>limite){
-    const h=document.createElement("div");h.className="hint";
-    h.textContent=n?`Mostrando ${limite} de ${lista.length}. Digite mais números para filtrar.`:`Mostrando os ${limite} mais recentes de ${lista.length}. Busque pelo nº do medidor para achar os outros.`;
-    pontosListaEl.appendChild(h);
-  }
-}
-buscaMedidorEl.addEventListener("input",()=>renderPontos(buscaMedidorEl.value));
-document.getElementById("limparBusca").onclick=()=>{buscaMedidorEl.value="";renderPontos("");};
-document.getElementById("salvarPosicaoMedidor").onclick=async()=>{
-  const b=document.getElementById("salvarPosicaoMedidor");
-  b.disabled=true;b.textContent="📍 Obtendo sua posição...";
-  const g=await obterGPS();
-  b.disabled=false;b.textContent="📍 Salvar minha posição com nº do medidor";
-  if(!g.ok)return alert(mensagemErroGPS(g.code));
-  if(g.precisao>50&&!confirm(`A precisão do GPS agora está em ~${Math.round(g.precisao)} m. Salvar mesmo assim?\n\n(Em local aberto costuma ficar mais precisa.)`))return;
-  if(salvarPonto(g.lat,g.lon))alert("Ponto salvo.");
-};
-function mostrarPontosNoMapa(lista){
-  if(!lista.length)return alert("Nenhum ponto salvo ainda.");
-  if(!map||!map.loaded())return alert(navigator.onLine?"O mapa ainda está carregando. Tente de novo em instantes.":"Sem internet: o mapa aparece quando o sinal voltar.");
-  limparMapa();rotaReqId++;
-  const b=new mapboxgl.LngLatBounds();
-  lista.forEach(p=>{
-    const end=enderecoEmCache(p.lat,p.lon);
-    const el=document.createElement("div");el.className="map-marker salvo";el.textContent="★";
-    const html=`<strong>🔢 ${p.medidor?escapeHtml(p.medidor):"Ponto salvo"}</strong><br>${end?escapeHtml(end)+"<br>":""}${p.obs?"📝 "+escapeHtml(p.obs)+"<br>":""}${p.lat.toFixed(6)}, ${p.lon.toFixed(6)}`;
-    markers.push(new mapboxgl.Marker({element:el}).setLngLat([p.lon,p.lat]).setPopup(new mapboxgl.Popup({offset:20}).setHTML(html)).addTo(map));
-    b.extend([p.lon,p.lat]);
-  });
-  if(lista.length===1){map.flyTo({center:[lista[0].lon,lista[0].lat],zoom:17,duration:700});markers[0].togglePopup();}
-  else map.fitBounds(b,{padding:45,maxZoom:16,duration:700});
-  mapStatusEl.textContent=`★ ${lista.length} ponto(s) salvo(s) · calcule a rota para voltar`;
-  document.getElementById("map").scrollIntoView({behavior:"smooth",block:"center"});
-}
-document.getElementById("verPontosMapa").onclick=()=>{
-  const lista=getPontos();
-  getRuas().forEach(nome=>{const c=lerCoord(nome);if(c&&!pontoPorCoord(c.lat,c.lon))lista.push({id:"f"+nome,medidor:"",lat:c.lat,lon:c.lon,obs:""});});
-  mostrarPontosNoMapa(lista);
-};
-let resolvendoPontos=false;
-async function resolverPontosPendentes(){
-  if(resolvendoPontos||!navigator.onLine)return;
-  resolvendoPontos=true;let mudou=false;
-  try{
-    for(const p of getPontos()){
-      if(!enderecoEmCache(p.lat,p.lon)){if(await enderecoDaCoord(p.lat,p.lon))mudou=true;await esperar(1100);}
-    }
-  }finally{resolvendoPontos=false}
-  if(mudou)renderPontos(buscaMedidorEl.value);
-}
-renderPontos();
-
-/* ==========================================================
-   LEMBRETE: ATUALIZAR MAPA DO GOOGLE MAPS (a cada 6 meses)
-   ========================================================== */
-const DIAS_LEMBRETE_MAPA=182;
-const lembreteMapaEl=document.getElementById("lembreteMapa");
-function verificarLembreteMapa(){
-  const ultimo=localStorage.getItem("lembrete-mapa");
-  const adiado=localStorage.getItem("lembrete-mapa-adiado");
-  const agora=Date.now();
-  if(adiado&&agora<+adiado){lembreteMapaEl.classList.remove("on");return}
-  const vencido=!ultimo||(agora-new Date(ultimo).getTime())>DIAS_LEMBRETE_MAPA*86400000;
-  lembreteMapaEl.classList.toggle("on",vencido);
-}
-document.getElementById("atualizarMapaBtn").onclick=()=>{
-  localStorage.setItem("lembrete-mapa",new Date().toISOString());
-  localStorage.removeItem("lembrete-mapa-adiado");
-  lembreteMapaEl.classList.remove("on");
-  // Tenta abrir o aplicativo do Google Maps; se não estiver instalado, abre o site.
-  const inicio=Date.now();
-  window.location.href="comgooglemaps://";
-  setTimeout(()=>{
-    if(!document.hidden&&Date.now()-inicio<2500)window.open("https://www.google.com/maps","_blank");
-  },1500);
-};
-document.getElementById("lembrarDepoisBtn").onclick=()=>{
-  localStorage.setItem("lembrete-mapa-adiado",String(Date.now()+7*86400000));
-  lembreteMapaEl.classList.remove("on");
-};
-verificarLembreteMapa();
-
-/* ==========================================================
-   BACKUP (exportar / importar)
-   ========================================================== */
-const CHAVES_BACKUP=["lembrete-mapa","pontos-rota","cidades-rota","ruas-rota","etapas-rota","ultima-rota","tema-rota","enderecos-coord","geo-ruas"];
-const infoBackupEl=document.getElementById("infoBackup");
-const textoInfoBackup=infoBackupEl.textContent;
-function mostrarUltimoBackup(){
-  const d=localStorage.getItem("ultimo-backup");
-  infoBackupEl.textContent=d?`${textoInfoBackup} Último backup: ${new Date(d).toLocaleString("pt-BR")}.`:textoInfoBackup;
-}
-document.getElementById("exportarBackup").onclick=async()=>{
-  const dados={};
-  CHAVES_BACKUP.forEach(k=>{const v=localStorage.getItem(k);if(v!==null){try{dados[k]=JSON.parse(v)}catch(e){dados[k]=v}}});
-  const pacote={app:"rota-do-dia",versao:1,criadoEm:new Date().toISOString(),dados};
-  const nomeArq=`rota-do-dia-backup-${hojeISO()}.json`;
-  const blob=new Blob([JSON.stringify(pacote,null,2)],{type:"application/json"});
-  let ok=false;
-  try{
-    const arq=new File([blob],nomeArq,{type:"application/json"});
-    if(navigator.canShare&&navigator.canShare({files:[arq]})){
-      await navigator.share({files:[arq],title:"Backup — Rota do Dia"});
-      ok=true;
-    }
-  }catch(e){if(e.name==="AbortError")return}
-  if(!ok){
-    const a=document.createElement("a");
-    a.href=URL.createObjectURL(blob);a.download=nomeArq;
-    document.body.appendChild(a);a.click();a.remove();
-    setTimeout(()=>URL.revokeObjectURL(a.href),5000);
-  }
-  localStorage.setItem("ultimo-backup",new Date().toISOString());
-  mostrarUltimoBackup();
-};
-document.getElementById("importarBackup").onclick=()=>document.getElementById("arquivoBackup").click();
-document.getElementById("arquivoBackup").onchange=async ev=>{
-  const f=ev.target.files[0];ev.target.value="";
-  if(!f)return;
-  let pacote;
-  try{pacote=JSON.parse(await f.text())}catch(e){return alert("Esse arquivo não é um backup válido.")}
-  if(!pacote||pacote.app!=="rota-do-dia"||!pacote.dados)return alert("Esse arquivo não é um backup do Rota do Dia.");
-  const d=pacote.dados;
-  const quando=pacote.criadoEm?new Date(pacote.criadoEm).toLocaleString("pt-BR"):"data desconhecida";
-  if(!confirm(`Importar o backup de ${quando}?\n\nOs favoritos, cidades e etapas do arquivo serão JUNTADOS aos que já estão no celular. Nada será apagado.`))return;
-  const juntarLista=(k)=>{
-    if(!Array.isArray(d[k]))return;
-    const atual=JSON.parse(localStorage.getItem(k)||"[]");
-    d[k].forEach(x=>{if(!atual.includes(x))atual.push(x)});
-    localStorage.setItem(k,JSON.stringify(atual));
-  };
-  juntarLista("cidades-rota");juntarLista("ruas-rota");
-  if(Array.isArray(d["pontos-rota"])){
-    const atual=getPontos();
-    d["pontos-rota"].forEach(p=>{
-      if(!p||typeof p.lat!=="number"||typeof p.lon!=="number")return;
-      const n=normMedidor(p.medidor);
-      const existe=atual.some(a=>a.id===p.id||(n&&normMedidor(a.medidor)===n)||(!n&&chaveCoord(a.lat,a.lon)===chaveCoord(p.lat,p.lon)));
-      if(!existe)atual.push(p);
+  function clearMarks(){
+    Array.prototype.forEach.call($meter.querySelectorAll('g[data-k]'), function(g){
+      g.querySelector('.ring').setAttribute('class','ring');
+      var a = g.querySelector('.ans');
+      a.setAttribute('class','ans');
+      a.textContent = '';
     });
-    setPontos(atual);
   }
-  if(Array.isArray(d["etapas-rota"])){
-    const atual=getEtapas();
-    d["etapas-rota"].forEach(e=>{if(e&&e.nome&&!atual.some(a=>a.nome===e.nome&&JSON.stringify(a.ruas)===JSON.stringify(e.ruas)))atual.push(e)});
-    localStorage.setItem("etapas-rota",JSON.stringify(atual));
-  }
-  ["enderecos-coord","geo-ruas"].forEach(k=>{
-    if(d[k]&&typeof d[k]==="object")setCache(k,Object.assign(getCache(k),d[k]));
-  });
-  if(d["ultima-rota"]&&!localStorage.getItem("ultima-rota"))localStorage.setItem("ultima-rota",JSON.stringify(d["ultima-rota"]));
-  if(d["tema-rota"]&&!localStorage.getItem("tema-rota"))localStorage.setItem("tema-rota",d["tema-rota"]);
-  renderCidades();renderRuasSalvas();renderEtapas();aplicarTema();renderPontos(buscaMedidorEl.value);
-  if(!currentStops.length)carregarUltimaRota();
-  if(currentStops.length)renderMap(currentStops);
-  alert("Backup importado.");
-};
-mostrarUltimoBackup();
 
-/* ==========================================================
-   QUANDO A INTERNET VOLTA
-   Troca as coordenadas pelo nome da rua, redesenha o mapa
-   e o trajeto.
-   ========================================================== */
-let atualizandoNomes=false;
-async function atualizarNomesPendentes(){
-  if(atualizandoNomes||!navigator.onLine)return;
-  const pend=currentStops.filter(s=>s.coord&&s.pendente);
-  if(!pend.length)return;
-  atualizandoNomes=true;
-  let mudou=false;
-  try{
-    for(const s of pend){
-      const end=await enderecoDaCoord(s.lat,s.lon);
-      if(end){s.nome=nomeDoPonto(s.lat,s.lon);s.pendente=false;mudou=true;}
-      await esperar(1100);
+  function buildKeypad(){
+    var keys = ['1','2','3','4','5','6','7','8','9','','0','back'], h = '';
+    keys.forEach(function(k){
+      if(k === ''){ h += '<button type="button" class="key blank" tabindex="-1" aria-hidden="true"></button>'; }
+      else if(k === 'back'){ h += '<button type="button" class="key" data-key="back" aria-label="Apagar">\u232b</button>'; }
+      else{ h += '<button type="button" class="key" data-key="'+k+'">'+k+'</button>'; }
+    });
+    $keypad.innerHTML = h;
+  }
+
+  function readingFull(){ return input.length >= state.dials; }
+
+  function renderBoxes(marks){
+    var D = state.dials, h = '', activeSlot = !readingFull() ? slotOf(input.length) : -1;
+    for(var i = 0; i < D; i++){
+      var cls = 'box', d = digitAt(i);
+      if(marks){ cls += marks[i] ? ' ok' : ' bad'; }
+      else if(i === activeSlot) cls += ' active';
+      h += '<div class="'+cls+'">'+(d !== undefined ? d : '')+'</div>';
     }
-  }finally{atualizandoNomes=false}
-  if(mudou){renderStops();salvarUltimaRota();renderMap(currentStops);renderRuasSalvas();renderPontos(buscaMedidorEl.value);}
-}
-const offlineBannerEl=document.getElementById("offlineBanner");
-function atualizarConexao(){
-  offlineBannerEl.classList.toggle("on",!navigator.onLine);
-}
-window.addEventListener("offline",atualizarConexao);
-window.addEventListener("online",async()=>{
-  atualizarConexao();
-  if(!map)await iniciarMapa();
-  else if(currentStops.length)renderMap(currentStops);
-  await atualizarNomesPendentes();
-  await resolverRotulosPendentes();
-  await resolverPontosPendentes();
-});
-atualizarConexao();
+    $boxes.innerHTML = h;
+  }
+  function renderCons(mark){
+    $consRow.hidden = !state.constOn;
+    if(!state.constOn) return;
+    var cls = 'cons-box';
+    if(mark === true) cls += ' ok';
+    else if(mark === false) cls += ' bad';
+    else if(readingFull() && !checked) cls += ' active';
+    $consBox.className = cls;
+    $consBox.innerHTML = (cinput ? num(+cinput) : '') + '<span class="unit">kWh</span>';
+  }
 
-/* MODO OFFLINE (service worker) */
-if("serviceWorker" in navigator){
-  window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
-}
+  function renderControls(){
+    function mark(attr, fn){
+      Array.prototype.forEach.call(document.querySelectorAll('['+attr+']'), function(b){
+        b.setAttribute('aria-pressed', String(fn(b.getAttribute(attr))));
+      });
+    }
+    mark('data-meter-type', function(v){ return v === state.meterType; });
+    mark('data-level', function(v){ return v === state.level; });
+    mark('data-dials', function(v){ return +v === state.dials; });
+    mark('data-timed', function(v){ return (v === '1') === state.timed; });
+    mark('data-const', function(v){ return (v === '1') === state.constOn; });
+    mark('data-dir', function(v){ return v === state.dir; });
+    var h = state.dir === 'rtl'
+      ? 'Digitando da direita para a esquerda (comece pela unidade)'
+      : 'Digitando da esquerda para a direita';
+    if(state.constOn) h += '. Depois digite o consumo.';
+    $dirHint.textContent = h;
+    $clock.hidden = !state.timed;
+  }
 
-carregarUltimaRota();
-iniciarMapa();
-setTimeout(()=>{atualizarNomesPendentes().then(resolverRotulosPendentes).then(resolverPontosPendentes)},2000);
+  function renderStats(){
+    document.getElementById('stOk').textContent = state.ok + ' de ' + state.total;
+    document.getElementById('stStreak').textContent = state.streak;
+    document.getElementById('stBest').textContent = state.best;
+    document.getElementById('stAvg').textContent = state.tCount ? fmtT(state.tSum / state.tCount) : '–';
+    document.getElementById('stFast').textContent = state.tBest ? fmtT(state.tBest) : '–';
+    Array.prototype.forEach.call(document.querySelectorAll('[data-timed-only]'), function(el){ el.hidden = !state.timed; });
+  }
+
+  function canCheck(){ return readingFull() && (!state.constOn || cinput.length > 0); }
+  function renderAction(){
+    if(checked){ $go.textContent = 'Próxima leitura'; $go.disabled = false; }
+    else{ $go.textContent = 'Conferir'; $go.disabled = !canCheck(); }
+    Array.prototype.forEach.call($keypad.querySelectorAll('.key[data-key]'), function(b){ b.disabled = checked; });
+  }
+
+  function press(d){
+    if(checked) return;
+    if(!readingFull()){ input += d; }
+    else if(state.constOn && cinput.length < 9){
+      if(cinput === '' && d === '0') return;
+      cinput += d;
+    }else return;
+    renderBoxes(); renderCons(); renderAction();
+  }
+  function back(){
+    if(checked) return;
+    if(state.constOn && cinput.length){ cinput = cinput.slice(0,-1); }
+    else if(input.length){ input = input.slice(0,-1); }
+    else return;
+    renderBoxes(); renderCons(); renderAction();
+  }
+
+  /* ---------- explicações ---------- */
+  function isTrickyIn(o, k){
+    if(k === 0) return false;
+    var lowV = o.v[k-1], low = Math.floor(lowV), lf = lowV - low;
+    return (low === 9 && lf >= 0.4) || (low === 0 && lf <= 0.35);
+  }
+  function explain(k){
+    var d = q.digits[k], nx = (d+1) % 10;
+    var t = 'O ponteiro está entre o '+d+' e o '+nx+'. Vale '+d+'.';
+    if(k > 0){
+      var lowV = q.v[k-1], low = Math.floor(lowV), lf = lowV - low;
+      if(low === 9 && lf >= 0.4) t += ' Ele parece estar sobre o '+nx+', mas o mostrador da direita ainda está no 9 e não completou a volta.';
+      else if(low === 0 && lf <= 0.35) t += ' O mostrador da direita já passou do 0, então o '+d+' já vale.';
+    }
+    return t;
+  }
+
+  function check(){
+    if(checked || !canCheck()) return;
+    checked = true;
+    var secs = null;
+    if(state.timed && clockStarted){ secs = (performance.now() - t0) / 1000; }
+    stopClock();
+    if(secs !== null){ $clock.textContent = fmtT(secs); }
+    var D = state.dials, marks = [], readOk = true, notes = '';
+    var wheels = $meter.querySelectorAll('.cyclo-wheel');
+    for(var i = 0; i < D; i++){
+      var k = D-1-i, want = q.digits[k], got = +digitAt(i), ok = (want === got);
+      marks.push(ok);
+      if(!ok) readOk = false;
+      if(state.meterType === 'ponteiro'){
+        var g = $meter.querySelector('g[data-i="'+i+'"]');
+        if(g){
+          g.querySelector('.ring').setAttribute('class','ring '+(ok?'ok':'bad'));
+          var a = g.querySelector('.ans');
+          a.setAttribute('class','ans '+(ok?'ok':'bad'));
+          a.textContent = want;
+        }
+        if(!ok || isTrickyIn(q, k)){
+          var extra = (!ok && !isCW(k)) ? ' Neste mostrador os números correm no sentido anti-horário.' : '';
+          var typed = ok ? '' : ' Você digitou '+got+'.';
+          notes += '<li class="'+(ok?'ok':'bad')+'"><b>Mostrador \u00d7'+fmt(k)+' ('+NAMES[k]+')</b><span>'+explain(k)+typed+extra+'</span></li>';
+        }
+      }else if(state.meterType === 'ciclometrico'){
+        if(wheels[i]) wheels[i].className = 'cyclo-wheel ' + (ok ? 'ok' : 'bad');
+        if(!ok || q.off[k] >= 0.25){
+          notes += '<li class="'+(ok?'ok':'bad')+'"><b>Rolo da '+NAMES[k]+'</b><span>' +
+            (q.off[k] >= 0.25 ? 'O rolo está virando do '+want+' para o '+((want+1)%10)+'. Vale o que está saindo: '+want+'.' : 'Vale '+want+'.') +
+            (ok ? '' : ' Você digitou '+got+'.') + '</span></li>';
+        }
+      }
+    }
+    var reading = pad(q.intN);
+    var consOk = true;
+    if(state.constOn){
+      consOk = +cinput === q.cons;
+      var M = pow10(D);
+      var calc = q.turned
+        ? '('+num(M)+' + '+reading+' − '+pad(q.prev)+') × '+q.K+' = '+num(q.diff)+' × '+q.K+' = '+num(q.cons)+' kWh'
+        : '('+reading+' − '+pad(q.prev)+') × '+q.K+' = '+num(q.diff)+' × '+q.K+' = '+num(q.cons)+' kWh';
+      var turnNote = q.turned ? ' A leitura atual é menor que a anterior: o medidor virou e passou pelo zero.' : '';
+      notes += '<li class="'+(consOk?'ok':'bad')+'"><b>Consumo</b><span>'+calc+'.'+turnNote +
+        (consOk ? '' : ' Você digitou '+num(+cinput)+' kWh.') +
+        (!readOk ? ' A conta usa a leitura certa.' : '') + '</span></li>';
+    }
+    var allOk = readOk && consOk;
+
+    state.total += 1;
+    if(allOk){ state.ok += 1; state.streak += 1; if(state.streak > state.best) state.best = state.streak; }
+    else{ state.streak = 0; }
+    if(allOk && secs !== null){
+      state.tSum += secs; state.tCount += 1;
+      if(!state.tBest || secs < state.tBest) state.tBest = secs;
+    }
+    save();
+    renderStats();
+    renderBoxes(marks);
+    renderCons(state.constOn ? consOk : undefined);
+
+    var head;
+    if(allOk) head = 'Certo. A leitura é <span class="reading">'+reading+'</span>' + (state.constOn ? ' e o consumo '+num(q.cons)+' kWh.' : '.');
+    else if(!readOk) head = 'A leitura certa é <span class="reading">'+reading+'</span>. Você digitou <span class="reading">'+typedReading()+'</span>.';
+    else head = 'Leitura certa, mas o consumo é '+num(q.cons)+' kWh.';
+    $result.className = 'result '+(allOk?'ok':'bad');
+    var timeLine = secs !== null ? '<p class="timeline">Tempo: '+fmtT(secs)+(allOk ? '' : '. O tempo só entra na média quando você acerta.')+'</p>' : '';
+    $result.innerHTML = '<h2>'+head+'</h2>' + timeLine + (notes ? '<ul class="notes">'+notes+'</ul>' : '');
+    $result.hidden = false;
+    renderAction();
+    $go.focus();
+  }
+
+  function next(){
+    stopClock();
+    clockStarted = false;
+    newQuestion();
+    clearMarks();
+    $result.hidden = true;
+    $result.innerHTML = '';
+    $clock.textContent = fmtT(0);
+    renderBoxes(); renderCons(); renderAction();
+    setTimeout(applyNeedles, 40);
+    if(state.timed) delayTimer = setTimeout(startClock, reduceMotion ? 150 : 1150);
+  }
+  function restart(rebuild){
+    if(rebuild) buildMeter();
+    q = null;
+    next();
+  }
+
+  $keypad.addEventListener('click', function(e){
+    var b = e.target.closest('button[data-key]');
+    if(!b) return;
+    var k = b.getAttribute('data-key');
+    if(k === 'back') back(); else press(k);
+  });
+  $go.addEventListener('click', function(){ if(checked) next(); else check(); });
+  document.getElementById('nextReading').addEventListener('click', next);
+
+  document.querySelector('.controls').addEventListener('click', function(e){
+    var b = e.target.closest('button');
+    if(!b) return;
+    if(b.hasAttribute('data-meter-type')){
+      var mt = b.getAttribute('data-meter-type');
+      if(state.meterType === mt) return;
+      state.meterType = mt; save(); renderControls(); restart(true);
+    }else if(b.hasAttribute('data-level')){
+      var lv = b.getAttribute('data-level');
+      if(state.level === lv) return;
+      state.level = lv; save(); renderControls(); restart(false);
+    }else if(b.hasAttribute('data-dials')){
+      var d = +b.getAttribute('data-dials');
+      if(state.dials === d) return;
+      state.dials = d; save(); renderControls(); restart(true);
+    }else if(b.hasAttribute('data-const')){
+      var c = b.getAttribute('data-const') === '1';
+      if(state.constOn === c) return;
+      state.constOn = c; save(); renderControls(); restart(false);
+    }else if(b.hasAttribute('data-timed')){
+      var t = b.getAttribute('data-timed') === '1';
+      if(state.timed === t) return;
+      state.timed = t; save(); renderControls(); renderStats(); restart(false);
+    }else if(b.hasAttribute('data-dir')){
+      var dir = b.getAttribute('data-dir');
+      if(state.dir === dir) return;
+      state.dir = dir; save(); renderControls();
+      if(!checked){ input = ''; cinput = ''; renderBoxes(); renderCons(); renderAction(); }
+    }
+  });
+  document.getElementById('reset').addEventListener('click', function(){
+    state.ok = 0; state.total = 0; state.streak = 0; state.best = 0;
+    state.tSum = 0; state.tCount = 0; state.tBest = 0;
+    save(); renderStats();
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.ctrlKey || e.metaKey || e.altKey) return;
+    if(/^[0-9]$/.test(e.key)){ press(e.key); }
+    else if(e.key === 'Backspace'){ back(); }
+    else if(e.key === 'Enter'){
+      if(e.target && e.target.tagName === 'BUTTON') return;
+      if(checked) next(); else check();
+    }
+  });
+
+  /* ---------- atualizar aplicativo (busca a versão mais nova, sem cache) ---------- */
+  document.getElementById('refreshApp').addEventListener('click', async function(){
+    this.classList.add('spin');
+    try{
+      if(window.caches && caches.keys){
+        var keys = await caches.keys();
+        await Promise.all(keys.map(function(k){ return caches.delete(k); }));
+      }
+    }catch(e){}
+    var url = location.href.split('#')[0].replace(/([?&])v=[^&]*&?/, '$1').replace(/[?&]$/, '');
+    url += (url.indexOf('?') >= 0 ? '&' : '?') + 'v=' + Date.now();
+    location.replace(url);
+  });
+
+  document.getElementById('shareApp').addEventListener('click', async function(){
+    var url = location.href.split('#')[0].replace(/([?&])v=[^&]*&?/, '$1').replace(/[?&]$/, '');
+    var shareData = {
+      title: 'Treino de leitura de medidores',
+      text: 'Treino de leitura de medidores — pratique ponteiro, ciclométrico e eletrônico.',
+      url: url
+    };
+    try{
+      if(navigator.share){ await navigator.share(shareData); }
+      else if(navigator.clipboard){ await navigator.clipboard.writeText(url); alert('Link do aplicativo copiado.'); }
+      else{ prompt('Copie o link do aplicativo:', url); }
+    }catch(e){}
+  });
+
+  buildKeypad();
+  renderControls();
+  renderStats();
+  buildMeter();
+  next();
+})();
 </script>
 </body>
 </html>
